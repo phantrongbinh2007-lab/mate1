@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vua Cờ Xuyên Việt: Hành Trình Chiếu Hết</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Vua Cờ Xuyên Việt: Hành Trình Chiếu Hết</h1>
+        <p>Tìm cách chiếu hết trong 1 nước để di chuyển.</p>
+        
+        <div id="timer-display" style="font-size: 24px; font-weight: bold; color: #d84315; margin-top: 10px;">
+            Thời gian: 00:00
+        </div>
+    </div>
+
+    <div class="game-container">
+        <!-- Bảng xếp hạng (Leaderboard) -->
+        <div class="leaderboard-section">
+            <h3>🏆 BẢNG VÀNG KỶ LỤC</h3>
+            <ul id="leaderboard-list">
+                <li>Đang tải...</li>
+            </ul>
+        </div>
+
+        <div class="map-section">
+            <div class="map-wrapper">
+                <img src="assets/map.png" alt="Bản đồ Việt Nam" id="vn-map">
+                <img src="assets/car.png" alt="Xe cute" id="cute-car">
+            </div>
+            <div class="province-info">
+                <h3>Vị trí hiện tại: <span id="province-name">Đang tải...</span></h3>
+            </div>
+        </div>
+
+        <div class="board-section">
+            <div id="board" style="width: 520px"></div>
+            <div class="controls">
+                <p id="status-message" class="status-msg">Đang tải thế trận...</p>
+                <button id="next-btn" style="display:none;">Lên xe đi tiếp!</button>
+                
+                <!-- Form lưu kỷ lục ẩn, chỉ hiện khi phá băng game -->
+                <div id="save-record-form" style="display:none; margin-top: 15px;">
+                    <input type="text" id="player-name" placeholder="Nhập tên của bạn..." maxlength="20">
+                    <button id="save-btn">Lưu Kỷ Lục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khung hiển thị Video nổi góc phải cày view -->
+    <div class="video-widget">
+        <p>🎬 Thưởng thức MV:</p>
+        <iframe width="320" height="180" src="https://www.youtube.com/embed/_vmhJSe3HA4?rel=0&loop=1&playlist=_vmhJSe3HA4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border-radius: 8px;"></iframe>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+    
+    <!-- Thư viện Firebase (Bản Compat để dùng chung với Script hiện tại) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

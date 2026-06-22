@@ -1,0 +1,207 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: #1a237e;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 18px;
+    color: #455a64;
+    font-style: italic;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.game-container {
+    display: flex;
+    gap: 40px;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.map-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-wrapper {
+    position: relative;
+    width: 360px;  
+    height: 560px; 
+    background-color: #e0f7fa;
+    border: 2px dashed #00838f;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#vn-map {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#cute-car {
+    position: absolute;
+    width: 55px; 
+    transition: top 1s ease-in-out, left 1s ease-in-out;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+}
+
+.province-info h3 {
+    font-size: 20px;
+    margin-top: 15px;
+    color: #d32f2f;
+}
+
+.controls {
+    text-align: center;
+}
+
+.status-msg {
+    font-size: 22px; 
+    font-weight: bold;
+    color: #1565c0;
+    margin-top: 20px;
+    min-height: 30px;
+}
+
+#next-btn {
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#next-btn:hover {
+    background-color: #1b5e20;
+}
+
+/* =======================================
+   GIAO DIỆN KHUNG VIDEO CÀY VIEW GÓC PHẢI
+   ======================================= */
+.video-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ffffff;
+    padding: 10px; /* Thu gọn viền xung quanh */
+    border: 2px solid #e0f7fa;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 1000;
+    text-align: center;
+}
+
+.video-widget p {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #1565c0;
+    font-weight: bold;
+}
+
+/* Ép cứng kích thước iframe nhỏ đi 20% */
+.video-widget iframe {
+    width: 256px !important; 
+    height: 144px !important;
+    border-radius: 8px;
+}
+
+#youtube-player {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* =======================================
+   BẢNG XẾP HẠNG & FORM LƯU ĐIỂM
+   ======================================= */
+.leaderboard-section {
+    width: 250px;
+    background: #fff9c4;
+    border: 2px solid #fbc02d;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.leaderboard-section h3 {
+    text-align: center;
+    color: #c62828;
+    margin-top: 0;
+    font-size: 18px;
+    border-bottom: 2px dashed #fbc02d;
+    padding-bottom: 10px;
+}
+
+#leaderboard-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #fff59d;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #37474f;
+}
+
+#leaderboard-list li span {
+    color: #d84315;
+}
+
+#player-name {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #90caf9;
+    border-radius: 6px;
+    outline: none;
+    width: 200px;
+}
+
+#save-btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#save-btn:hover {
+    background-color: #f57c00;
+}

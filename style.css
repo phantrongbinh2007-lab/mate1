@@ -32,6 +32,13 @@ body {
     margin-bottom: 10px;
 }
 
+.timer-display {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d84315;
+    margin-top: 10px;
+}
+
 .game-container {
     display: flex;
     gap: 40px;
@@ -49,8 +56,8 @@ body {
 
 .map-wrapper {
     position: relative;
-    width: 360px;  
-    height: 560px; 
+    width: 360px;
+    height: 560px;
     background-color: #e0f7fa;
     border: 2px dashed #00838f;
     border-radius: 10px;
@@ -65,7 +72,7 @@ body {
 
 #cute-car {
     position: absolute;
-    width: 55px; 
+    width: 55px;
     transition: top 1s ease-in-out, left 1s ease-in-out;
     z-index: 10;
     transform: translate(-50%, -50%);
@@ -82,7 +89,7 @@ body {
 }
 
 .status-msg {
-    font-size: 22px; 
+    font-size: 22px;
     font-weight: bold;
     color: #1565c0;
     margin-top: 20px;
@@ -105,15 +112,13 @@ body {
     background-color: #1b5e20;
 }
 
-/* =======================================
-   GIAO DIỆN KHUNG VIDEO CÀY VIEW GÓC PHẢI
-   ======================================= */
+/* VIDEO WIDGET */
 .video-widget {
     position: fixed;
     bottom: 30px;
     right: 30px;
     background: #ffffff;
-    padding: 10px; /* Thu gọn viền xung quanh */
+    padding: 10px;
     border: 2px solid #e0f7fa;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
@@ -128,21 +133,13 @@ body {
     font-weight: bold;
 }
 
-/* Ép cứng kích thước iframe nhỏ đi 20% */
 .video-widget iframe {
-    width: 256px !important; 
+    width: 256px !important;
     height: 144px !important;
     border-radius: 8px;
 }
 
-#youtube-player {
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* =======================================
-   BẢNG XẾP HẠNG & FORM LƯU ĐIỂM
-   ======================================= */
+/* LEADERBOARD */
 .leaderboard-section {
     width: 250px;
     background: #fff9c4;
@@ -204,4 +201,118 @@ body {
 
 #save-btn:hover {
     background-color: #f57c00;
+}
+
+/* =======================================
+   RESPONSIVE
+   ======================================= */
+
+@media (max-width: 1200px) {
+    .game-container {
+        gap: 20px;
+        padding: 25px;
+    }
+
+    .map-wrapper {
+        width: 300px;
+        height: 480px;
+    }
+
+    #cute-car {
+        width: 45px;
+    }
+
+    .leaderboard-section {
+        width: 220px;
+    }
+}
+
+@media (max-width: 900px) {
+    body {
+        padding: 10px;
+    }
+
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .leaderboard-section {
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .map-wrapper {
+        width: 90%;
+        max-width: 360px;
+        height: auto;
+        aspect-ratio: 360 / 560;
+    }
+
+    #vn-map {
+        height: 100%;
+    }
+
+    #cute-car {
+        width: 40px;
+    }
+
+    .board-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #board {
+        width: 90% !important;
+        max-width: 420px;
+    }
+}
+
+@media (max-width: 600px) {
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header p {
+        font-size: 15px;
+    }
+
+    .status-msg {
+        font-size: 18px;
+    }
+
+    #next-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    .video-widget {
+        bottom: 15px;
+        right: 15px;
+        padding: 6px;
+    }
+
+    .video-widget iframe {
+        width: 200px !important;
+        height: 112px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .video-widget iframe {
+        width: 170px !important;
+        height: 96px !important;
+    }
+
+    #board {
+        width: 95% !important;
+    }
+
+    .leaderboard-section {
+        width: 95%;
+    }
 }

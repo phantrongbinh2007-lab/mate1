@@ -15,9 +15,72 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 // ==========================================
-// ROUTES (giữ nguyên)
+// ROUTES (Đã phục hồi đủ 63 tỉnh thành)
 // ==========================================
-const routes = [ /* ... giữ nguyên toàn bộ danh sách tỉnh ... */ ];
+const routes = [
+    { name: "Hà Giang", top: "5%", left: "45%" },
+    { name: "Cao Bằng", top: "7%", left: "55%" },
+    { name: "Lào Cai", top: "8%", left: "35%" },
+    { name: "Lai Châu", top: "9%", left: "25%" },
+    { name: "Điện Biên", top: "12%", left: "20%" },
+    { name: "Sơn La", top: "15%", left: "30%" },
+    { name: "Yên Bái", top: "14%", left: "40%" },
+    { name: "Tuyên Quang", top: "12%", left: "48%" },
+    { name: "Bắc Kạn", top: "10%", left: "53%" },
+    { name: "Lạng Sơn", top: "12%", left: "60%" },
+    { name: "Thái Nguyên", top: "15%", left: "52%" },
+    { name: "Phú Thọ", top: "17%", left: "45%" },
+    { name: "Vĩnh Phúc", top: "18%", left: "48%" },
+    { name: "Hà Nội", top: "20%", left: "50%" },
+    { name: "Bắc Giang", top: "18%", left: "56%" },
+    { name: "Bắc Ninh", top: "19%", left: "54%" },
+    { name: "Quảng Ninh", top: "18%", left: "65%" },
+    { name: "Hải Phòng", top: "22%", left: "62%" },
+    { name: "Hải Dương", top: "21%", left: "57%" },
+    { name: "Hưng Yên", top: "22%", left: "54%" },
+    { name: "Hà Nam", top: "24%", left: "52%" },
+    { name: "Thái Bình", top: "25%", left: "58%" },
+    { name: "Nam Định", top: "26%", left: "55%" },
+    { name: "Ninh Bình", top: "27%", left: "50%" },
+    { name: "Thanh Hóa", top: "30%", left: "45%" },
+    { name: "Nghệ An", top: "35%", left: "40%" },
+    { name: "Hà Tĩnh", top: "40%", left: "45%" },
+    { name: "Quảng Bình", top: "45%", left: "50%" },
+    { name: "Quảng Trị", top: "48%", left: "55%" },
+    { name: "Thừa Thiên Huế", top: "51%", left: "60%" },
+    { name: "Đà Nẵng", top: "54%", left: "65%" },
+    { name: "Quảng Nam", top: "57%", left: "62%" },
+    { name: "Quảng Ngãi", top: "60%", left: "65%" },
+    { name: "Kon Tum", top: "58%", left: "55%" },
+    { name: "Gia Lai", top: "63%", left: "55%" },
+    { name: "Bình Định", top: "65%", left: "68%" },
+    { name: "Phú Yên", top: "68%", left: "70%" },
+    { name: "Đắk Lắk", top: "68%", left: "58%" },
+    { name: "Đắk Nông", top: "72%", left: "55%" },
+    { name: "Khánh Hòa", top: "72%", left: "72%" },
+    { name: "Lâm Đồng", top: "75%", left: "62%" },
+    { name: "Ninh Thuận", top: "76%", left: "70%" },
+    { name: "Bình Thuận", top: "80%", left: "65%" },
+    { name: "Bình Phước", top: "78%", left: "52%" },
+    { name: "Tây Ninh", top: "80%", left: "45%" },
+    { name: "Đồng Nai", top: "82%", left: "55%" },
+    { name: "Bình Dương", top: "81%", left: "50%" },
+    { name: "TP. Hồ Chí Minh", top: "83%", left: "48%" },
+    { name: "Bà Rịa - Vũng Tàu", top: "85%", left: "56%" },
+    { name: "Long An", top: "84%", left: "42%" },
+    { name: "Tiền Giang", top: "86%", left: "45%" },
+    { name: "Bến Tre", top: "87%", left: "48%" },
+    { name: "Đồng Tháp", top: "86%", left: "38%" },
+    { name: "Vĩnh Long", top: "88%", left: "42%" },
+    { name: "Trà Vinh", top: "90%", left: "46%" },
+    { name: "Cần Thơ", top: "89%", left: "38%" },
+    { name: "Hậu Giang", top: "91%", left: "39%" },
+    { name: "Sóc Trăng", top: "92%", left: "43%" },
+    { name: "An Giang", top: "88%", left: "32%" },
+    { name: "Kiên Giang", top: "92%", left: "28%" },
+    { name: "Bạc Liêu", top: "95%", left: "38%" },
+    { name: "Cà Mau", top: "98%", left: "32%" }
+];
 
 // ==========================================
 // STATE
@@ -30,7 +93,9 @@ const state = {
     startTime: 0,
     timerInterval: null,
     totalPenalty: 0,
-    finalElapsedSeconds: 0
+    finalElapsedSeconds: 0,
+    awaitingNext: false,
+    gameFinished: false
 };
 
 // ==========================================
@@ -77,44 +142,79 @@ function stopTimer() {
 // ==========================================
 // LEADERBOARD
 // ==========================================
-function loadLeaderboard() {
+function setLeaderboardMessage(text) {
     const list = document.getElementById("leaderboard-list");
-    list.innerHTML = "<li>Đang tải...</li>";
+    list.innerHTML = "";
+    const li = document.createElement("li");
+    li.textContent = text;
+    list.appendChild(li);
+}
+
+function loadLeaderboard() {
+    setLeaderboardMessage("Đang tải...");
 
     db.collection("leaderboard")
         .orderBy("time", "asc")
         .limit(10)
         .get()
         .then((snap) => {
+            const list = document.getElementById("leaderboard-list");
             list.innerHTML = "";
-            let rank = 1;
 
+            if (snap.empty) {
+                setLeaderboardMessage("Chưa có kỷ lục nào!");
+                return;
+            }
+
+            let rank = 1;
             snap.forEach((doc) => {
                 const d = doc.data();
                 const li = document.createElement("li");
-                li.innerHTML = `<div>#${rank} ${d.name}</div><span>${formatTime(d.time)}</span>`;
+
+                const nameDiv = document.createElement("div");
+                nameDiv.textContent = `#${rank} ${d.name || "Ẩn danh"}`;
+
+                const timeSpan = document.createElement("span");
+                timeSpan.textContent = formatTime(Number(d.time) || 0);
+
+                li.appendChild(nameDiv);
+                li.appendChild(timeSpan);
                 list.appendChild(li);
                 rank++;
             });
-
-            if (!list.innerHTML.trim()) {
-                list.innerHTML = "<li>Chưa có kỷ lục nào!</li>";
-            }
+        })
+        .catch((err) => {
+            console.error(err);
+            setLeaderboardMessage("Không tải được bảng xếp hạng.");
         });
 }
 
 function setupSaveRecord() {
     document.getElementById("save-btn").onclick = () => {
-        const name = document.getElementById("player-name").value.trim();
+        const name = document.getElementById("player-name").value.trim().slice(0, 20);
         if (!name) return alert("Nhập tên để lưu kỷ lục!");
+
+        const time = state.finalElapsedSeconds;
+        if (!Number.isFinite(time) || time < 0) {
+            return alert("Thời gian không hợp lệ!");
+        }
+
+        const saveBtn = document.getElementById("save-btn");
+        saveBtn.disabled = true;
 
         db.collection("leaderboard").add({
             name,
-            time: state.finalElapsedSeconds,
+            time,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
             alert("Đã lưu kỷ lục!");
             document.getElementById("save-record-form").style.display = "none";
+            loadLeaderboard();
+        }).catch((err) => {
+            console.error(err);
+            alert("Không lưu được kỷ lục. Thử lại sau!");
+        }).finally(() => {
+            saveBtn.disabled = false;
         });
     };
 }
@@ -153,10 +253,13 @@ function loadPuzzle(i) {
 
     if (i >= state.puzzles.length) {
         stopTimer();
+        state.gameFinished = true;
+        state.awaitingNext = false;
+
         document.getElementById("timer-display").innerText =
             `Thành tích: ${formatTime(state.finalElapsedSeconds)}`;
 
-        msg.innerHTML = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
+        msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
         msg.style.color = "#2e7d32";
 
         nextBtn.style.display = "none";
@@ -166,12 +269,14 @@ function loadPuzzle(i) {
 
     const puzzle = state.puzzles[i];
     state.game.load(puzzle.fen);
+    state.awaitingNext = false;
+    state.gameFinished = false;
 
     const turn = state.game.turn();
     state.board.orientation(turn === "w" ? "white" : "black");
     state.board.position(puzzle.fen);
 
-    msg.innerText = `LƯỢT ĐI: BÊN ${turn === "w" ? "TRẮNG" : "ĐEN"} (Bài ${i + 1}/${routes.length})`;
+    msg.textContent = `LƯỢT ĐI: BÊN ${turn === "w" ? "TRẮNG" : "ĐEN"} (Bài ${i + 1}/${routes.length})`;
     msg.style.color = turn === "w" ? "#1565c0" : "#37474f";
 
     nextBtn.style.display = "none";
@@ -179,6 +284,8 @@ function loadPuzzle(i) {
 }
 
 function onDrop(src, dst) {
+    if (state.awaitingNext || state.gameFinished) return "snapback";
+
     const puzzle = state.puzzles[state.currentPuzzleIndex];
 
     let move = state.game.move({ from: src, to: dst, promotion: "q" });
@@ -196,7 +303,8 @@ function onDrop(src, dst) {
     const msg = document.getElementById("status-message");
 
     if (correct) {
-        msg.innerText = "Chính xác! Lên xe đi tiếp!";
+        state.awaitingNext = true;
+        msg.textContent = "Chính xác! Lên xe đi tiếp!";
         msg.style.color = "#2e7d32";
         document.getElementById("next-btn").style.display = "inline-block";
 
@@ -210,7 +318,7 @@ function onDrop(src, dst) {
     state.game.undo();
     state.totalPenalty += 10;
 
-    msg.innerText = "Sai rồi! +10 giây!";
+    msg.textContent = "Sai rồi! +10 giây!";
     msg.style.color = "#c62828";
 
     const timer = document.getElementById("timer-display");
@@ -230,7 +338,9 @@ async function initGame() {
 
     try {
         const res = await fetch("puzzles.json");
-        let all = await res.json();
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const all = await res.json();
 
         state.puzzles = shuffle(all).slice(0, routes.length);
 

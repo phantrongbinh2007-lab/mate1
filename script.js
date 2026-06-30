@@ -18,68 +18,68 @@ const db = firebase.firestore();
 // ROUTES (Đã phục hồi đủ 63 tỉnh thành)
 // ==========================================
 const routes = [
-    { name: "Hà Giang", top: "5%", left: "45%" },
-    { name: "Cao Bằng", top: "7%", left: "55%" },
-    { name: "Lào Cai", top: "8%", left: "35%" },
-    { name: "Lai Châu", top: "9%", left: "25%" },
-    { name: "Điện Biên", top: "12%", left: "20%" },
-    { name: "Sơn La", top: "15%", left: "30%" },
-    { name: "Yên Bái", top: "14%", left: "40%" },
-    { name: "Tuyên Quang", top: "12%", left: "48%" },
-    { name: "Bắc Kạn", top: "10%", left: "53%" },
-    { name: "Lạng Sơn", top: "12%", left: "60%" },
-    { name: "Thái Nguyên", top: "15%", left: "52%" },
-    { name: "Phú Thọ", top: "17%", left: "45%" },
-    { name: "Vĩnh Phúc", top: "18%", left: "48%" },
-    { name: "Hà Nội", top: "20%", left: "50%" },
-    { name: "Bắc Giang", top: "18%", left: "56%" },
-    { name: "Bắc Ninh", top: "19%", left: "54%" },
-    { name: "Quảng Ninh", top: "18%", left: "65%" },
-    { name: "Hải Phòng", top: "22%", left: "62%" },
-    { name: "Hải Dương", top: "21%", left: "57%" },
-    { name: "Hưng Yên", top: "22%", left: "54%" },
-    { name: "Hà Nam", top: "24%", left: "52%" },
-    { name: "Thái Bình", top: "25%", left: "58%" },
-    { name: "Nam Định", top: "26%", left: "55%" },
-    { name: "Ninh Bình", top: "27%", left: "50%" },
-    { name: "Thanh Hóa", top: "30%", left: "45%" },
-    { name: "Nghệ An", top: "35%", left: "40%" },
-    { name: "Hà Tĩnh", top: "40%", left: "45%" },
-    { name: "Quảng Bình", top: "45%", left: "50%" },
-    { name: "Quảng Trị", top: "48%", left: "55%" },
-    { name: "Thừa Thiên Huế", top: "51%", left: "60%" },
-    { name: "Đà Nẵng", top: "54%", left: "65%" },
-    { name: "Quảng Nam", top: "57%", left: "62%" },
-    { name: "Quảng Ngãi", top: "60%", left: "65%" },
-    { name: "Kon Tum", top: "58%", left: "55%" },
-    { name: "Gia Lai", top: "63%", left: "55%" },
-    { name: "Bình Định", top: "65%", left: "68%" },
-    { name: "Phú Yên", top: "68%", left: "70%" },
-    { name: "Đắk Lắk", top: "68%", left: "58%" },
-    { name: "Đắk Nông", top: "72%", left: "55%" },
-    { name: "Khánh Hòa", top: "72%", left: "72%" },
-    { name: "Lâm Đồng", top: "75%", left: "62%" },
-    { name: "Ninh Thuận", top: "76%", left: "70%" },
-    { name: "Bình Thuận", top: "80%", left: "65%" },
-    { name: "Bình Phước", top: "78%", left: "52%" },
-    { name: "Tây Ninh", top: "80%", left: "45%" },
-    { name: "Đồng Nai", top: "82%", left: "55%" },
-    { name: "Bình Dương", top: "81%", left: "50%" },
-    { name: "TP. Hồ Chí Minh", top: "83%", left: "48%" },
-    { name: "Bà Rịa - Vũng Tàu", top: "85%", left: "56%" },
-    { name: "Long An", top: "84%", left: "42%" },
-    { name: "Tiền Giang", top: "86%", left: "45%" },
-    { name: "Bến Tre", top: "87%", left: "48%" },
-    { name: "Đồng Tháp", top: "86%", left: "38%" },
-    { name: "Vĩnh Long", top: "88%", left: "42%" },
-    { name: "Trà Vinh", top: "90%", left: "46%" },
-    { name: "Cần Thơ", top: "89%", left: "38%" },
-    { name: "Hậu Giang", top: "91%", left: "39%" },
-    { name: "Sóc Trăng", top: "92%", left: "43%" },
-    { name: "An Giang", top: "88%", left: "32%" },
-    { name: "Kiên Giang", top: "92%", left: "28%" },
-    { name: "Bạc Liêu", top: "95%", left: "38%" },
-    { name: "Cà Mau", top: "98%", left: "32%" }
+    { name: "Hà Giang", top: "5%", left: "45%", fact: "Cao nguyên đá Hà Giang có những ngọn núi hình thang rất đẹp như tranh vẽ." },
+    { name: "Cao Bằng", top: "7%", left: "55%", fact: "Thác Bản Giốc ở Cao Bằng là một trong những thác nước đẹp nhất Việt Nam." },
+    { name: "Lào Cai", top: "8%", left: "35%", fact: "Núi Fansipan ở Lào Cai cao nhất Đông Dương, gọi là nóc nhà Đông Dương." },
+    { name: "Lai Châu", top: "9%", left: "25%", fact: "Lai Châu có những ruộng bậc thang uốn lượn rất đẹp trên núi cao." },
+    { name: "Điện Biên", top: "12%", left: "20%", fact: "Điện Biên Phủ là nơi diễn ra trận đánh lịch sử năm 1954 của Việt Nam." },
+    { name: "Sơn La", top: "15%", left: "30%", fact: "Hồ thủy điện Sơn La rộng lớn, là hồ nhân tạo lớn nhất Việt Nam." },
+    { name: "Yên Bái", top: "14%", left: "40%", fact: "Hồ Thác Bà ở Yên Bái rộng như một biển nước xanh giữa núi rừng." },
+    { name: "Tuyên Quang", top: "12%", left: "48%", fact: "Tuyên Quang có ATK – nơi Bác Hồ và các cụ lãnh đạo từng làm việc." },
+    { name: "Bắc Kạn", top: "10%", left: "53%", fact: "Hồ Ba Bể ở Bắc Kạn là hồ nước ngọt tự nhiên lớn nhất Việt Nam." },
+    { name: "Lạng Sơn", top: "12%", left: "60%", fact: "Lạng Sơn có núi Mẫu Sơn nổi tiếng, mùa đông đôi khi có tuyết rơi." },
+    { name: "Thái Nguyên", top: "15%", left: "52%", fact: "Thái Nguyên nổi tiếng với chè xanh và bảo tàng các dân tộc Việt Nam." },
+    { name: "Phú Thọ", top: "17%", left: "45%", fact: "Phú Thọ được gọi là cội nguồn, nơi thờ Hùng Vương – vua nước Văn Lang." },
+    { name: "Vĩnh Phúc", top: "18%", left: "48%", fact: "Vĩnh Phúc có chùa Tây Phương với nhiều tượng Phật gỗ quý." },
+    { name: "Hà Nội", top: "20%", left: "50%", fact: "Hà Nội là thủ đô nghìn năm văn hiến, có Hồ Gươm và phố cổ rất đẹp." },
+    { name: "Bắc Giang", top: "18%", left: "56%", fact: "Bắc Giang có vùng vải thiều ngọt nổi tiếng cả nước." },
+    { name: "Bắc Ninh", top: "19%", left: "54%", fact: "Bắc Ninh là quê hương của quan họ – hát call-and-response trên thuyền." },
+    { name: "Quảng Ninh", top: "18%", left: "65%", fact: "Vịnh Hạ Long ở Quảng Ninh được UNESCO công nhận di sản thiên nhiên thế giới." },
+    { name: "Hải Phòng", top: "22%", left: "62%", fact: "Hải Phòng là thành phố cảng lớn, có đảo Cát Bà xinh đẹp." },
+    { name: "Hải Dương", top: "21%", left: "57%", fact: "Hải Dương có chùa Con Sơn – nơi thiền sư Huyền Quang từng tu hành." },
+    { name: "Hưng Yên", top: "22%", left: "54%", fact: "Hưng Yên nổi tiếng với long nhãn – trái nhãn to, ngọt và thơm." },
+    { name: "Hà Nam", top: "24%", left: "52%", fact: "Hà Nam có chùa Tam Chúc – quần thể chùa chiều rộng rất lớn." },
+    { name: "Thái Bình", top: "25%", left: "58%", fact: "Thái Bình có biển Đồng Châu với rừng ngập mặn và bãi biển hoang sơ." },
+    { name: "Nam Định", top: "26%", left: "55%", fact: "Nam Định có nhà thờ Phát Diệm – kiến trúc độc đáo kết hợp Đông Tây." },
+    { name: "Ninh Bình", top: "27%", left: "50%", fact: "Ninh Bình có Tràng An – hang động và sông nước đẹp như cổ tích." },
+    { name: "Thanh Hóa", top: "30%", left: "45%", fact: "Thanh Hóa có thành nhà Hồ – di tích lịch sử bằng đá rất đặc biệt." },
+    { name: "Nghệ An", top: "35%", left: "40%", fact: "Nghệ An là quê hương của Bác Hồ – Chủ tịch Hồ Chí Minh kính yêu." },
+    { name: "Hà Tĩnh", top: "40%", left: "45%", fact: "Hà Tình có núi Hồng Lĩnh và biển xanh, là quê của nhiều nhà thơ lớn." },
+    { name: "Quảng Bình", top: "45%", left: "50%", fact: "Quảng Bình có động Phong Nha – Kẻ Bàng, hang động kỳ vĩ nhất thế giới." },
+    { name: "Quảng Trị", top: "48%", left: "55%", fact: "Quảng Trị có cầu Hiền Lương – biểu tượng chia cắt và thống nhất đất nước." },
+    { name: "Thừa Thiên Huế", top: "51%", left: "60%", fact: "Huế từng là kinh đô triều Nguyễn, có Đại Nội và sông Hương thơ mộng." },
+    { name: "Đà Nẵng", top: "54%", left: "65%", fact: "Đà Nẵng có cầu Rồng phun lửa và bãi biển Mỹ Khê rất đẹp." },
+    { name: "Quảng Nam", top: "57%", left: "62%", fact: "Quảng Nam có phố cổ Hội An – đèn lồng lung linh về đêm." },
+    { name: "Quảng Ngãi", top: "60%", left: "65%", fact: "Quảng Ngãi có đảo Lý Sơn – vùng đất của tỏi và biển xanh trong." },
+    { name: "Kon Tum", top: "58%", left: "55%", fact: "Kon Tum có nhà rông cao vút – biểu tượng văn hóa của các dân tộc Tây Nguyên." },
+    { name: "Gia Lai", top: "63%", left: "55%", fact: "Gia Lai có biển hồ T'nưng – mặt hồ xanh như gương giữa cao nguyên." },
+    { name: "Bình Định", top: "65%", left: "68%", fact: "Bình Định có tháp Chăm Bánh Ít – kiến trúc cổ hơn 900 năm tuổi." },
+    { name: "Phú Yên", top: "68%", left: "70%", fact: "Phú Yên có mũi Điện Cấp – nơi ngắm bình minh đẹp nhất ven biển." },
+    { name: "Đắk Lắk", top: "68%", left: "58%", fact: "Đắk Lắk có hồ Lak – hồ nước ngọt lớn giữa cao nguyên Tây Nguyên." },
+    { name: "Đắk Nông", top: "72%", left: "55%", fact: "Đắk Nông có thác Dray Nur – ngọn thác hùng vĩ giữa rừng xanh." },
+    { name: "Khánh Hòa", top: "72%", left: "72%", fact: "Khánh Hòa có vịnh Nha Trang xinh đẹp với nhiều hòn đảo nhỏ." },
+    { name: "Lâm Đồng", top: "75%", left: "62%", fact: "Lâm Đồng có Đà Lạt – thành phố ngàn hoa, mát mẻ quanh năm." },
+    { name: "Ninh Thuận", top: "76%", left: "70%", fact: "Ninh Thuận có đồi cát Mũi Dinh – cảnh sa mạc mini bên biển." },
+    { name: "Bình Thuận", top: "80%", left: "65%", fact: "Bình Thuận có Mũi Né – đồi cát bay và biển xanh rất nổi tiếng." },
+    { name: "Bình Phước", top: "78%", left: "52%", fact: "Bình Phước có rừng cao su xanh mướt và vườn cacao thơm ngon." },
+    { name: "Tây Ninh", top: "80%", left: "45%", fact: "Tây Ninh có núi Bà Đen cao 986 mét – ngọn núi thiêng linh." },
+    { name: "Đồng Nai", top: "82%", left: "55%", fact: "Đồng Nai có thác Giang Điền – khu du lịch sinh thái gần thành phố." },
+    { name: "Bình Dương", top: "81%", left: "50%", fact: "Bình Dương có khu du lịch Đại Nam – công trình kiến trúc ấn tượng." },
+    { name: "TP. Hồ Chí Minh", top: "83%", left: "48%", fact: "TP. Hồ Chí Minh là thành phố lớn nhất Việt Nam, sôi động và hiện đại." },
+    { name: "Bà Rịa - Vũng Tàu", top: "85%", left: "56%", fact: "Vũng Tàu có bãi biển đẹp và tượng Chúa Kitô Vua trên núi Nhỏ." },
+    { name: "Long An", top: "84%", left: "42%", fact: "Long An có rừng ngập mặn Cần Giờ – lá phổi xanh của thành phố Hồ Chí Minh." },
+    { name: "Tiền Giang", top: "86%", left: "45%", fact: "Tiền Giang có cù lao Tân Long – vùng trái cây ngọt nổi tiếng miền Tây." },
+    { name: "Bến Tre", top: "87%", left: "48%", fact: "Bến Tre được gọi là xứ dừa – cây dừa mọc khắp nơi." },
+    { name: "Đồng Tháp", top: "86%", left: "38%", fact: "Đồng Tháp có cánh đồng sen hồng rộng lớn, đẹp như tranh vẽ." },
+    { name: "Vĩnh Long", top: "88%", left: "42%", fact: "Vĩnh Long có chợ nổi Cái Bè – mua bán trên sông rất vui nhộn." },
+    { name: "Trà Vinh", top: "90%", left: "46%", fact: "Trà Vinh có nhiều chùa Khmer với kiến trúc mái cong rất đẹp." },
+    { name: "Cần Thơ", top: "89%", left: "38%", fact: "Cần Thơ có chợ nổi Cái Răng – chợ sáng sớm trên sông Hậu." },
+    { name: "Hậu Giang", top: "91%", left: "39%", fact: "Hậu Giang có rừng tràm Trà Sư – chim trời tấp nập bay lượn." },
+    { name: "Sóc Trăng", top: "92%", left: "43%", fact: "Sóc Trăng có chùa Dơi – hàng nghìn con dơi treo mình trên cây." },
+    { name: "An Giang", top: "88%", left: "32%", fact: "An Giang có núi Sam và miếu Bà Chúa Xứ Núi Sam linh thiêng." },
+    { name: "Kiên Giang", top: "92%", left: "28%", fact: "Kiên Giang có quần đảo Phú Quốc – đảo ngọc với biển trong veo." },
+    { name: "Bạc Liêu", top: "95%", left: "38%", fact: "Bạc Liêu có nhà Công tử Bạc Liệu và cánh đồng muối trắng xóa." },
+    { name: "Cà Mau", top: "98%", left: "32%", fact: "Cà Mau là mũi đất cực Nam Việt Nam – điểm cuối hành trình xuyên Việt!" }
 ];
 
 // ==========================================
@@ -95,7 +95,9 @@ const state = {
     totalPenalty: 0,
     finalElapsedSeconds: 0,
     awaitingNext: false,
-    gameFinished: false
+    gameFinished: false,
+    soundMuted: false,
+    audioCtx: null
 };
 
 // ==========================================
@@ -129,7 +131,7 @@ function startTimer() {
 
     state.timerInterval = setInterval(() => {
         const elapsed = Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
-        document.getElementById("timer-display").innerText = `Thời gian: ${formatTime(elapsed)}`;
+        document.getElementById("timer-display").innerText = `Thời gian luyện tập: ${formatTime(elapsed)}`;
     }, 1000);
 }
 
@@ -137,6 +139,77 @@ function stopTimer() {
     clearInterval(state.timerInterval);
     state.finalElapsedSeconds =
         Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
+}
+
+// ==========================================
+// SOUND
+// ==========================================
+function ensureAudio() {
+    if (!state.audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return null;
+        state.audioCtx = new AudioContext();
+    }
+    if (state.audioCtx.state === "suspended") {
+        state.audioCtx.resume();
+    }
+    return state.audioCtx;
+}
+
+function playSuccessSound() {
+    if (state.soundMuted) return;
+
+    const ctx = ensureAudio();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const notes = [523.25, 659.25, 783.99];
+
+    notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const start = now + i * 0.09;
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.18, start + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+
+        osc.start(start);
+        osc.stop(start + 0.36);
+    });
+}
+
+function bounceCar() {
+    const car = document.getElementById("cute-car");
+    car.classList.remove("car-bounce");
+    void car.offsetWidth;
+    car.classList.add("car-bounce");
+    car.addEventListener("animationend", () => car.classList.remove("car-bounce"), { once: true });
+}
+
+function setupSoundToggle() {
+    const btn = document.getElementById("sound-toggle");
+    const saved = localStorage.getItem("mate1-sound-muted");
+    if (saved === "1") {
+        state.soundMuted = true;
+        btn.textContent = "🔇 Âm thanh: Tắt";
+        btn.classList.add("is-muted");
+        btn.setAttribute("aria-pressed", "true");
+    }
+
+    btn.onclick = () => {
+        ensureAudio();
+        state.soundMuted = !state.soundMuted;
+        localStorage.setItem("mate1-sound-muted", state.soundMuted ? "1" : "0");
+        btn.textContent = state.soundMuted ? "🔇 Âm thanh: Tắt" : "🔊 Âm thanh: Bật";
+        btn.classList.toggle("is-muted", state.soundMuted);
+        btn.setAttribute("aria-pressed", state.soundMuted ? "true" : "false");
+        if (!state.soundMuted) playSuccessSound();
+    };
 }
 
 // ==========================================
@@ -230,6 +303,7 @@ function updateCarPosition(i) {
     car.style.left = loc.left;
 
     document.getElementById("province-name").innerText = loc.name;
+    document.getElementById("province-fact").textContent = `📍 ${loc.fact}`;
 }
 
 // ==========================================
@@ -257,7 +331,7 @@ function loadPuzzle(i) {
         state.awaitingNext = false;
 
         document.getElementById("timer-display").innerText =
-            `Thành tích: ${formatTime(state.finalElapsedSeconds)}`;
+            `Thành tích luyện tập: ${formatTime(state.finalElapsedSeconds)}`;
 
         msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
         msg.style.color = "#2e7d32";
@@ -286,6 +360,8 @@ function loadPuzzle(i) {
 function onDrop(src, dst) {
     if (state.awaitingNext || state.gameFinished) return "snapback";
 
+    ensureAudio();
+
     const puzzle = state.puzzles[state.currentPuzzleIndex];
 
     let move = state.game.move({ from: src, to: dst, promotion: "q" });
@@ -304,6 +380,8 @@ function onDrop(src, dst) {
 
     if (correct) {
         state.awaitingNext = true;
+        playSuccessSound();
+        bounceCar();
         msg.textContent = "Chính xác! Lên xe đi tiếp!";
         msg.style.color = "#2e7d32";
         document.getElementById("next-btn").style.display = "inline-block";
@@ -334,6 +412,7 @@ function onDrop(src, dst) {
 async function initGame() {
     loadLeaderboard();
     setupSaveRecord();
+    setupSoundToggle();
     initBoard();
 
     try {

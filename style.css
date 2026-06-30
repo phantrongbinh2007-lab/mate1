@@ -39,6 +39,28 @@ body {
     margin-top: 10px;
 }
 
+.sound-toggle {
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 2px solid #90caf9;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.sound-toggle:hover {
+    background: #bbdefb;
+}
+
+.sound-toggle.is-muted {
+    background: #eceff1;
+    color: #607d8b;
+    border-color: #b0bec5;
+}
+
 .game-container {
     display: flex;
     gap: 40px;
@@ -82,10 +104,35 @@ body {
     transform: translate(-50%, -50%);
 }
 
+#cute-car.car-bounce {
+    animation: carBounce 0.6s ease;
+}
+
+@keyframes carBounce {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    25% { transform: translate(-50%, -65%) scale(1.08); }
+    50% { transform: translate(-50%, -50%) scale(1); }
+    75% { transform: translate(-50%, -58%) scale(1.04); }
+}
+
 .province-info h3 {
     font-size: 20px;
     margin-top: 15px;
     color: #d32f2f;
+    margin-bottom: 8px;
+}
+
+.province-fact {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #00695c;
+    background: #e0f2f1;
+    border-left: 4px solid #00897b;
+    padding: 10px 12px;
+    border-radius: 0 8px 8px 0;
+    margin: 0;
+    max-width: 360px;
+    min-height: 48px;
 }
 
 /* =======================================
@@ -253,6 +300,10 @@ body {
         width: 90% !important;
         max-width: 420px !important;
         min-width: unset; /* C?c k? quan tr?ng d? khùng b? trùn mùn hùnh di?n tho?i */
+    }
+    .province-fact {
+        max-width: 100%;
+        font-size: 14px;
     }
 }
 

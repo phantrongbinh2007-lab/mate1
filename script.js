@@ -34,6 +34,7 @@ const routes = [
     { name: "Lạng Sơn", top: "12%", left: "60%", fact: "Lạng Sơn có núi Mẫu Sơn nổi tiếng, mùa đông đôi khi có tuyết rơi." },
     { name: "Thái Nguyên", top: "15%", left: "52%", fact: "Thái Nguyên nổi tiếng với chè xanh và bảo tàng các dân tộc Việt Nam." },
     { name: "Phú Thọ", top: "17%", left: "45%", fact: "Phú Thọ được gọi là cội nguồn, nơi thờ Hùng Vương – vua nước Văn Lang." },
+    { name: "Hòa Bình", top: "19%", left: "42%", fact: "Hòa Bình có hồ thủy điện Hòa Bình lớn và thung lũng Mai Châu rất đẹp." },
     { name: "Vĩnh Phúc", top: "18%", left: "48%", fact: "Vĩnh Phúc có chùa Tây Phương với nhiều tượng Phật gỗ quý." },
     { name: "Hà Nội", top: "20%", left: "50%", fact: "Hà Nội là thủ đô nghìn năm văn hiến, có Hồ Gươm và phố cổ rất đẹp." },
     { name: "Bắc Giang", top: "18%", left: "56%", fact: "Bắc Giang có vùng vải thiều ngọt nổi tiếng cả nước." },

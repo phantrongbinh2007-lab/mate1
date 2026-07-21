@@ -1,20 +1,51 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /leaderboard/{docId} {
-      allow read: if true;
+
+    function elapsedSeconds(startedAt) {
+      return (request.time.toMillis() - startedAt.toMillis()) / 1000;
+    }
+
+    // Phiên chơi: thời gian thật do server đo, không tin client.
+    match /runs/{runId} {
+      allow read: if resource.data.status == 'finished';
 
       allow create: if
-        request.resource.data.keys().hasOnly(['name', 'time', 'timestamp'])
+        request.resource.data.keys().hasOnly(['startedAt', 'status', 'puzzleCount'])
+        && request.resource.data.status == 'playing'
+        && request.resource.data.puzzleCount is int
+        && request.resource.data.puzzleCount == 63
+        && request.resource.data.startedAt == request.time;
+
+      // Hoàn thành: time không được nhỏ hơn thời gian thật đã trôi qua.
+      allow update: if
+        resource.data.status == 'playing'
+        && request.resource.data.status == 'finished'
+        && request.resource.data.keys().hasOnly([
+          'startedAt', 'status', 'puzzleCount', 'name', 'time', 'finishedAt'
+        ])
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.puzzleCount == resource.data.puzzleCount
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 20
+        && request.resource.data.finishedAt == request.time
         && request.resource.data.time is int
-        && request.resource.data.time >= 60
+        && request.resource.data.time >= 120
         && request.resource.data.time <= 7200
-        && request.resource.data.timestamp is timestamp;
+        // Phải chơi/chờ đủ thời gian thật trên server (không fake time thấp).
+        && elapsedSeconds(resource.data.startedAt) >= 120
+        // time không nhỏ hơn wall-clock; phạt +10s/lỗi được phép cộng thêm.
+        && request.resource.data.time >= elapsedSeconds(resource.data.startedAt) - 3
+        && request.resource.data.time <= elapsedSeconds(resource.data.startedAt) + 630;
 
-      allow update, delete: if false;
+      allow delete: if false;
+    }
+
+    // Chặn ghi thẳng vào leaderboard cũ (lỗ hổng chính).
+    match /leaderboard/{docId} {
+      allow read: if true;
+      allow create, update, delete: if false;
     }
   }
 }

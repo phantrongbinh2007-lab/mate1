@@ -45,11 +45,11 @@ def extract_mate_in_1(input_csv, output_json, limit=50, min_rating=1000, max_rat
                             if len(single_solution) == 5 and single_solution[-1].lower() != 'q':
                                 continue
 
-                            # Lưu dữ liệu vào mảng JSON (lúc này solution luôn là string)
+                            # Không xuất solution ra client (chống đọc đáp án).
+                            # Frontend xác nhận bằng chess.js in_checkmate().
                             puzzles.append({
                                 "id": row['PuzzleId'],
                                 "fen": new_fen,
-                                "solution": single_solution,
                                 "rating": rating
                             })
                             

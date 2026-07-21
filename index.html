@@ -18,14 +18,35 @@
         <p>Tìm cách chiếu hết trong 1 nước để di chuyển.</p>
 
         <div id="timer-display" class="timer-display">
-            Thời gian luyện tập: 00:00
+            Chọn chế độ để bắt đầu
         </div>
         <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="false" title="Bật/tắt âm thanh">
             🔊 Âm thanh: Bật
         </button>
     </div>
 
-    <div class="game-container">
+    <!-- Chọn chế độ -->
+    <div id="mode-select" class="mode-select">
+        <h2>Chọn chế độ chơi</h2>
+        <div class="mode-cards">
+            <button type="button" id="mode-practice" class="mode-card mode-practice">
+                <strong>Luyện tập</strong>
+                <span>Không tính giờ · Có gợi ý &amp; bỏ qua · Không xếp hạng</span>
+            </button>
+            <button type="button" id="mode-challenge" class="mode-card mode-challenge">
+                <strong>Thi đấu</strong>
+                <span>Tính giờ · Lưu kỷ lục · Dùng gợi ý/bỏ qua sẽ không được xếp hạng</span>
+            </button>
+        </div>
+        <div class="mode-leaderboard">
+            <h3>🏆 Bảng vàng kỷ lục</h3>
+            <ul id="leaderboard-list-home">
+                <li>Đang tải...</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="game-container" id="game-container" hidden>
         
         <!-- Leaderboard -->
         <div class="leaderboard-section">
@@ -54,6 +75,10 @@
 
             <div class="controls">
                 <p id="status-message" class="status-msg">Đang tải thế trận...</p>
+                <div id="help-buttons" class="help-buttons">
+                    <button type="button" id="hint-btn">💡 Gợi ý</button>
+                    <button type="button" id="skip-btn">⏭ Bỏ qua bài này</button>
+                </div>
                 <button id="next-btn" style="display:none;">Lên xe đi tiếp!</button>
 
                 <!-- Save record -->

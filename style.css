@@ -61,6 +61,164 @@ body {
     border-color: #b0bec5;
 }
 
+/* =======================================
+   CH?N CH? ??
+   ======================================= */
+.mode-select {
+    width: min(720px, 100%);
+    background: white;
+    padding: 28px 24px;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mode-select h2 {
+    margin: 0 0 18px;
+    color: #1a237e;
+    font-size: 22px;
+}
+
+.mode-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mode-card {
+    flex: 1 1 240px;
+    max-width: 300px;
+    padding: 18px 16px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mode-card strong {
+    font-size: 18px;
+}
+
+.mode-card span {
+    font-size: 14px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+.mode-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+.mode-practice {
+    background: #e8f5e9;
+    border-color: #81c784;
+    color: #1b5e20;
+}
+
+.mode-challenge {
+    background: #fff3e0;
+    border-color: #ffb74d;
+    color: #e65100;
+}
+
+.mode-leaderboard {
+    margin-top: 22px;
+    text-align: left;
+    background: #fffde7;
+    border: 2px solid #fbc02d;
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.mode-leaderboard h3 {
+    margin: 0 0 10px;
+    text-align: center;
+    color: #c62828;
+    font-size: 16px;
+}
+
+#leaderboard-list-home {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#leaderboard-list-home li {
+    padding: 6px 0;
+    border-bottom: 1px solid #fff59d;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    color: #37474f;
+}
+
+#leaderboard-list-home li span {
+    color: #d84315;
+}
+
+.help-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.help-buttons button {
+    padding: 10px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 2px solid #90caf9;
+    background: #e3f2fd;
+    color: #1565c0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.help-buttons button:hover:not(:disabled) {
+    background: #bbdefb;
+}
+
+.help-buttons button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#skip-btn {
+    border-color: #ffcc80;
+    background: #fff8e1;
+    color: #ef6c00;
+}
+
+#skip-btn:hover:not(:disabled) {
+    background: #ffe0b2;
+}
+
+/* Highlight n??c ?i h?p l? / g?i ? */
+.highlight-legal {
+    box-shadow: inset 0 0 0 4px rgba(21, 101, 192, 0.55);
+}
+
+.highlight-capture {
+    box-shadow: inset 0 0 0 4px rgba(198, 40, 40, 0.65);
+}
+
+.highlight-hint-from {
+    box-shadow: inset 0 0 0 5px rgba(255, 193, 7, 0.9);
+}
+
+.highlight-hint-to {
+    box-shadow: inset 0 0 0 5px rgba(46, 125, 50, 0.85);
+}
+
 .game-container {
     display: flex;
     gap: 40px;
@@ -72,7 +230,7 @@ body {
 }
 
 /* =======================================
-   B?N ù? (MAP)
+   B?N ?? (MAP)
    ======================================= */
 .map-section {
     display: flex;
@@ -136,7 +294,7 @@ body {
 }
 
 /* =======================================
-   BùN C? & ùI?U KHI?N (BOARD)
+   B?N C? & ?I?U KHI?N (BOARD)
    ======================================= */
 .board-section {
     display: flex;
@@ -145,7 +303,7 @@ body {
     flex-grow: 1;
 }
 
-/* Kùch thu?c bùn c? to d?p trùn mùy tùnh */
+/* K?ch thu?c b?n c? to d?p tr?n m?y t?nh */
 .board-responsive, #board {
     width: 100% !important;
     max-width: 480px !important;
@@ -182,7 +340,7 @@ body {
 }
 
 /* =======================================
-   B?NG VùNG (LEADERBOARD)
+   B?NG V?NG (LEADERBOARD)
    ======================================= */
 .leaderboard-section {
     width: 250px;
@@ -248,7 +406,7 @@ body {
 }
 
 /* =======================================
-   RESPONSIVE (ùI?N THO?I & TABLET)
+   RESPONSIVE (?I?N THO?I & TABLET)
    ======================================= */
 @media (max-width: 1200px) {
     .game-container {
@@ -299,7 +457,7 @@ body {
     .board-responsive, #board {
         width: 90% !important;
         max-width: 420px !important;
-        min-width: unset; /* C?c k? quan tr?ng d? khùng b? trùn mùn hùnh di?n tho?i */
+        min-width: unset; /* C?c k? quan tr?ng d? kh?ng b? tr?n m?n h?nh di?n tho?i */
     }
     .province-fact {
         max-width: 100%;

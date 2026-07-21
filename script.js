@@ -14,6 +14,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+/** Thời gian tối thiểu (giây) — khớp firestore.rules */
+const MIN_SAVE_SECONDS = 120;
+const MAX_SAVE_SECONDS = 7200;
+
 // ==========================================
 // ROUTES (Đã phục hồi đủ 63 tỉnh thành)
 // ==========================================
@@ -97,7 +101,15 @@ const state = {
     awaitingNext: false,
     gameFinished: false,
     soundMuted: false,
-    audioCtx: null
+    audioCtx: null,
+    runId: null,
+    recordSaved: false,
+    /** 'practice' | 'challenge' | null */
+    mode: null,
+    /** Đã dùng gợi ý / bỏ qua → không được lưu BXH */
+    usedAssist: false,
+    hintLevel: 0,
+    hintMove: null
 };
 
 // ==========================================
@@ -110,7 +122,7 @@ function pieceTheme(piece) {
 function formatTime(sec) {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
-    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
 function shuffle(arr) {
@@ -121,6 +133,14 @@ function shuffle(arr) {
     return arr;
 }
 
+function isPractice() {
+    return state.mode === "practice";
+}
+
+function canSaveRecord() {
+    return state.mode === "challenge" && !state.usedAssist && !!state.runId;
+}
+
 // ==========================================
 // TIMER
 // ==========================================
@@ -129,14 +149,23 @@ function startTimer() {
     state.startTime = Date.now();
     state.totalPenalty = 0;
 
+    if (isPractice()) {
+        document.getElementById("timer-display").innerText = "Chế độ luyện tập (không tính giờ)";
+        return;
+    }
+
     state.timerInterval = setInterval(() => {
         const elapsed = Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
-        document.getElementById("timer-display").innerText = `Thời gian luyện tập: ${formatTime(elapsed)}`;
+        document.getElementById("timer-display").innerText = `Thời gian thi đấu: ${formatTime(elapsed)}`;
     }, 1000);
 }
 
 function stopTimer() {
     clearInterval(state.timerInterval);
+    if (isPractice()) {
+        state.finalElapsedSeconds = 0;
+        return;
+    }
     state.finalElapsedSeconds =
         Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
 }
@@ -213,82 +242,188 @@ function setupSoundToggle() {
 }
 
 // ==========================================
-// LEADERBOARD
+// ANTI-CHEAT: GAME RUN (server timestamp)
 // ==========================================
+async function startGameRun() {
+    const ref = await db.collection("runs").add({
+        startedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        status: "playing",
+        puzzleCount: routes.length
+    });
+    state.runId = ref.id;
+    state.recordSaved = false;
+}
+
+async function finishGameRun(name, time) {
+    if (!state.runId) {
+        throw new Error("missing-run");
+    }
+
+    await db.collection("runs").doc(state.runId).update({
+        status: "finished",
+        name,
+        time,
+        finishedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+}
+
+// ==========================================
+// LEADERBOARD — giữ BXH cũ + điểm runs mới
+// ==========================================
+function renderLeaderboard(entries) {
+    const targets = ["leaderboard-list", "leaderboard-list-home"]
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
+
+    targets.forEach((list) => {
+        list.innerHTML = "";
+
+        if (!entries.length) {
+            const li = document.createElement("li");
+            li.textContent = "Chưa có kỷ lục nào!";
+            list.appendChild(li);
+            return;
+        }
+
+        entries.slice(0, 10).forEach((d, i) => {
+            const li = document.createElement("li");
+
+            const nameDiv = document.createElement("div");
+            nameDiv.textContent = `#${i + 1} ${d.name || "Ẩn danh"}`;
+
+            const timeSpan = document.createElement("span");
+            timeSpan.textContent = formatTime(Number(d.time) || 0);
+
+            li.appendChild(nameDiv);
+            li.appendChild(timeSpan);
+            list.appendChild(li);
+        });
+    });
+}
+
 function setLeaderboardMessage(text) {
-    const list = document.getElementById("leaderboard-list");
-    list.innerHTML = "";
-    const li = document.createElement("li");
-    li.textContent = text;
-    list.appendChild(li);
+    ["leaderboard-list", "leaderboard-list-home"].forEach((id) => {
+        const list = document.getElementById(id);
+        if (!list) return;
+        list.innerHTML = "";
+        const li = document.createElement("li");
+        li.textContent = text;
+        list.appendChild(li);
+    });
 }
 
 function loadLeaderboard() {
     setLeaderboardMessage("Đang tải...");
 
-    db.collection("leaderboard")
+    const legacyPromise = db.collection("leaderboard")
         .orderBy("time", "asc")
-        .limit(10)
+        .limit(20)
         .get()
-        .then((snap) => {
-            const list = document.getElementById("leaderboard-list");
-            list.innerHTML = "";
-
-            if (snap.empty) {
-                setLeaderboardMessage("Chưa có kỷ lục nào!");
-                return;
-            }
-
-            let rank = 1;
-            snap.forEach((doc) => {
-                const d = doc.data();
-                const li = document.createElement("li");
-
-                const nameDiv = document.createElement("div");
-                nameDiv.textContent = `#${rank} ${d.name || "Ẩn danh"}`;
-
-                const timeSpan = document.createElement("span");
-                timeSpan.textContent = formatTime(Number(d.time) || 0);
-
-                li.appendChild(nameDiv);
-                li.appendChild(timeSpan);
-                list.appendChild(li);
-                rank++;
-            });
-        })
         .catch((err) => {
-            console.error(err);
-            setLeaderboardMessage("Không tải được bảng xếp hạng.");
+            console.warn("Không đọc được leaderboard cũ:", err);
+            return null;
         });
+
+    const runsPromise = db.collection("runs")
+        .where("status", "==", "finished")
+        .orderBy("time", "asc")
+        .limit(20)
+        .get()
+        .catch((err) => {
+            console.warn("Không đọc được runs:", err);
+            return null;
+        });
+
+    Promise.all([legacyPromise, runsPromise]).then(([legacySnap, runsSnap]) => {
+        const entries = [];
+
+        if (legacySnap && !legacySnap.empty) {
+            legacySnap.forEach((doc) => {
+                const d = doc.data();
+                entries.push({
+                    name: d.name,
+                    time: Number(d.time) || 0,
+                    source: "legacy"
+                });
+            });
+        }
+
+        if (runsSnap && !runsSnap.empty) {
+            runsSnap.forEach((doc) => {
+                const d = doc.data();
+                entries.push({
+                    name: d.name,
+                    time: Number(d.time) || 0,
+                    source: "run"
+                });
+            });
+        }
+
+        entries.sort((a, b) => a.time - b.time);
+        renderLeaderboard(entries);
+    }).catch((err) => {
+        console.error(err);
+        setLeaderboardMessage("Không tải được bảng xếp hạng.");
+    });
 }
 
 function setupSaveRecord() {
-    document.getElementById("save-btn").onclick = () => {
+    document.getElementById("save-btn").onclick = async () => {
         const name = document.getElementById("player-name").value.trim().slice(0, 20);
         if (!name) return alert("Nhập tên để lưu kỷ lục!");
 
-        const time = state.finalElapsedSeconds;
+        if (!canSaveRecord()) {
+            return alert("Lượt này không đủ điều kiện lưu kỷ lục (luyện tập hoặc đã dùng gợi ý/bỏ qua).");
+        }
+
+        if (state.recordSaved) {
+            return alert("Kỷ lục của lượt này đã được lưu!");
+        }
+
+        const wallSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+        const time = wallSeconds + state.totalPenalty;
+        state.finalElapsedSeconds = time;
+
         if (!Number.isFinite(time) || time < 0) {
             return alert("Thời gian không hợp lệ!");
+        }
+
+        if (wallSeconds < MIN_SAVE_SECONDS) {
+            return alert(
+                `Cần chơi ít nhất ${formatTime(MIN_SAVE_SECONDS)} thời gian thật mới lưu được kỷ lục. Còn thiếu khoảng ${formatTime(MIN_SAVE_SECONDS - wallSeconds)}.`
+            );
+        }
+
+        if (time < MIN_SAVE_SECONDS) {
+            return alert(`Thời gian tối thiểu để lưu kỷ lục là ${formatTime(MIN_SAVE_SECONDS)}.`);
+        }
+
+        if (time > MAX_SAVE_SECONDS) {
+            return alert("Thời gian quá dài để lưu kỷ lục.");
         }
 
         const saveBtn = document.getElementById("save-btn");
         saveBtn.disabled = true;
 
-        db.collection("leaderboard").add({
-            name,
-            time,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
+        try {
+            await finishGameRun(name, Math.floor(time));
+            state.recordSaved = true;
             alert("Đã lưu kỷ lục!");
             document.getElementById("save-record-form").style.display = "none";
             loadLeaderboard();
-        }).catch((err) => {
+        } catch (err) {
             console.error(err);
-            alert("Không lưu được kỷ lục. Thử lại sau!");
-        }).finally(() => {
+            const code = err && err.code;
+            if (code === "permission-denied") {
+                alert(
+                    "Không lưu được: thời gian không khớp phiên chơi (có thể do gian lận hoặc mạng chậm). Hãy chơi lại một lượt."
+                );
+            } else {
+                alert("Không lưu được kỷ lục. Thử lại sau!");
+            }
+        } finally {
             saveBtn.disabled = false;
-        });
+        }
     };
 }
 
@@ -307,14 +442,146 @@ function updateCarPosition(i) {
 }
 
 // ==========================================
+// HIGHLIGHT NƯỚC ĐI HỢP LỆ + GỢI Ý
+// ==========================================
+function removeHighlights() {
+    $("#board .square-55d63").removeClass(
+        "highlight-legal highlight-capture highlight-hint-from highlight-hint-to"
+    );
+}
+
+function highlightSquare(square, className) {
+    $("#board .square-" + square).addClass(className);
+}
+
+function onMouseoverSquare(square) {
+    if (state.awaitingNext || state.gameFinished) return;
+
+    const moves = state.game.moves({ square, verbose: true });
+    if (!moves.length) return;
+
+    highlightSquare(square, "highlight-legal");
+    moves.forEach((m) => {
+        const targetPiece = state.game.get(m.to);
+        highlightSquare(m.to, targetPiece ? "highlight-capture" : "highlight-legal");
+    });
+}
+
+function onMouseoutSquare() {
+    if (state.hintLevel > 0 && state.hintMove) {
+        removeHighlights();
+        applyHintHighlights();
+        return;
+    }
+    removeHighlights();
+}
+
+function findMateMove() {
+    const moves = state.game.moves({ verbose: true });
+    for (const m of moves) {
+        state.game.move(m);
+        const isMate = state.game.in_checkmate();
+        state.game.undo();
+        if (isMate) {
+            return { from: m.from, to: m.to, promotion: m.promotion || "q" };
+        }
+    }
+    return null;
+}
+
+function applyHintHighlights() {
+    if (!state.hintMove) return;
+    if (state.hintLevel >= 1) {
+        highlightSquare(state.hintMove.from, "highlight-hint-from");
+    }
+    if (state.hintLevel >= 2) {
+        highlightSquare(state.hintMove.to, "highlight-hint-to");
+    }
+}
+
+function markAssistUsed() {
+    if (state.usedAssist) return;
+    state.usedAssist = true;
+    if (state.mode === "challenge") {
+        const timer = document.getElementById("timer-display");
+        const note = " · Đã dùng trợ giúp (không xếp hạng)";
+        if (!timer.innerText.includes("không xếp hạng")) {
+            timer.innerText += note;
+        }
+    }
+}
+
+function setupHelpButtons() {
+    document.getElementById("hint-btn").onclick = () => {
+        if (state.awaitingNext || state.gameFinished) return;
+
+        if (!state.hintMove) {
+            state.hintMove = findMateMove();
+        }
+        if (!state.hintMove) {
+            alert("Không tìm được nước chiếu hết cho thế cờ này.");
+            return;
+        }
+
+        markAssistUsed();
+        state.hintLevel = Math.min(2, state.hintLevel + 1);
+        removeHighlights();
+        applyHintHighlights();
+
+        const msg = document.getElementById("status-message");
+        if (state.hintLevel === 1) {
+            msg.textContent = "Gợi ý: hãy nhìn ô được tô vàng — đó là quân cần đi.";
+        } else {
+            msg.textContent = "Gợi ý: ô vàng là quân đi, ô xanh lá là ô đích.";
+        }
+        msg.style.color = "#f9a825";
+    };
+
+    document.getElementById("skip-btn").onclick = () => {
+        if (state.awaitingNext || state.gameFinished) return;
+        if (!confirm("Bỏ qua bài này và đi tiếp?")) return;
+
+        markAssistUsed();
+        removeHighlights();
+        state.hintLevel = 0;
+        state.hintMove = null;
+        state.currentPuzzleIndex++;
+        updateCarPosition(state.currentPuzzleIndex);
+        loadPuzzle(state.currentPuzzleIndex);
+    };
+}
+
+function updateHelpButtonsVisibility() {
+    const help = document.getElementById("help-buttons");
+    const show = !state.awaitingNext && !state.gameFinished;
+    help.style.display = show ? "flex" : "none";
+}
+
+// ==========================================
 // CHESSBOARD
 // ==========================================
+function onDragStart(source, piece) {
+    if (state.awaitingNext || state.gameFinished) return false;
+    if (state.game.game_over()) return false;
+
+    const turn = state.game.turn();
+    if ((turn === "w" && piece.search(/^b/) !== -1) ||
+        (turn === "b" && piece.search(/^w/) !== -1)) {
+        return false;
+    }
+    return true;
+}
+
 function initBoard() {
     state.board = Chessboard("board", {
         draggable: true,
         pieceTheme,
         position: "start",
-        onDrop
+        onDragStart,
+        onDrop,
+        onMouseoverSquare,
+        onMouseoutSquare,
+        onSnapEnd: () => state.board.position(state.game.fen())
     });
 
     window.addEventListener("resize", () => state.board.resize());
@@ -325,19 +592,37 @@ function loadPuzzle(i) {
     const nextBtn = document.getElementById("next-btn");
     const saveForm = document.getElementById("save-record-form");
 
+    removeHighlights();
+    state.hintLevel = 0;
+    state.hintMove = null;
+
     if (i >= state.puzzles.length) {
         stopTimer();
         state.gameFinished = true;
         state.awaitingNext = false;
+        updateHelpButtonsVisibility();
+
+        if (isPractice()) {
+            document.getElementById("timer-display").innerText = "Hoàn thành luyện tập!";
+            msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! (Luyện tập — không xếp hạng)";
+            msg.style.color = "#2e7d32";
+            nextBtn.style.display = "none";
+            saveForm.style.display = "none";
+            return;
+        }
 
         document.getElementById("timer-display").innerText =
-            `Thành tích luyện tập: ${formatTime(state.finalElapsedSeconds)}`;
+            `Thành tích thi đấu: ${formatTime(state.finalElapsedSeconds)}`;
 
-        msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
+        if (canSaveRecord()) {
+            msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
+            saveForm.style.display = "block";
+        } else {
+            msg.textContent = "🎉 Hoàn thành! (Đã dùng gợi ý/bỏ qua — không lưu xếp hạng)";
+            saveForm.style.display = "none";
+        }
         msg.style.color = "#2e7d32";
-
         nextBtn.style.display = "none";
-        saveForm.style.display = "block";
         return;
     }
 
@@ -355,95 +640,117 @@ function loadPuzzle(i) {
 
     nextBtn.style.display = "none";
     saveForm.style.display = "none";
+    updateHelpButtonsVisibility();
 }
 
 function onDrop(src, dst) {
     if (state.awaitingNext || state.gameFinished) return "snapback";
 
     ensureAudio();
+    removeHighlights();
 
-    const puzzle = state.puzzles[state.currentPuzzleIndex];
-
-    let move = state.game.move({ from: src, to: dst, promotion: "q" });
+    const move = state.game.move({ from: src, to: dst, promotion: "q" });
     if (!move) return "snapback";
 
-    const moveStr = move.from + move.to + (move.promotion || "");
-    const basic = src + dst;
-
-    const solutions = Array.isArray(puzzle.solution)
-        ? puzzle.solution
-        : [puzzle.solution];
-
-    const correct = solutions.includes(moveStr) || solutions.includes(basic);
-
+    const correct = state.game.in_checkmate();
     const msg = document.getElementById("status-message");
 
     if (correct) {
         state.awaitingNext = true;
+        state.hintLevel = 0;
+        state.hintMove = null;
         playSuccessSound();
         bounceCar();
         msg.textContent = "Chính xác! Lên xe đi tiếp!";
         msg.style.color = "#2e7d32";
         document.getElementById("next-btn").style.display = "inline-block";
-
-        if (move.promotion) {
-            setTimeout(() => state.board.position(state.game.fen()), 200);
-        }
+        updateHelpButtonsVisibility();
         return;
     }
 
-    // Sai
     state.game.undo();
-    state.totalPenalty += 10;
 
-    msg.textContent = "Sai rồi! +10 giây!";
+    if (!isPractice()) {
+        state.totalPenalty += 10;
+        msg.textContent = "Sai rồi! +10 giây!";
+    } else {
+        msg.textContent = "Sai rồi! Thử lại nhé.";
+    }
     msg.style.color = "#c62828";
 
-    const timer = document.getElementById("timer-display");
-    timer.style.color = "red";
-    setTimeout(() => timer.style.color = "#d84315", 500);
+    if (!isPractice()) {
+        const timer = document.getElementById("timer-display");
+        timer.style.color = "red";
+        setTimeout(() => { timer.style.color = "#d84315"; }, 500);
+    }
 
     return "snapback";
 }
 
 // ==========================================
-// INIT GAME
+// MODE SELECT + INIT
 // ==========================================
-async function initGame() {
-    loadLeaderboard();
-    setupSaveRecord();
-    setupSoundToggle();
-    initBoard();
+async function startGameWithMode(mode) {
+    state.mode = mode;
+    state.usedAssist = false;
+    state.hintLevel = 0;
+    state.hintMove = null;
+    state.runId = null;
+    state.recordSaved = false;
+
+    document.getElementById("mode-select").hidden = true;
+    document.getElementById("game-container").hidden = false;
+
+    const msg = document.getElementById("status-message");
+    msg.textContent = "Đang tải thế trận...";
 
     try {
         const res = await fetch("puzzles.json");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const all = await res.json();
-
         state.puzzles = shuffle(all).slice(0, routes.length);
+
+        if (mode === "challenge") {
+            await startGameRun();
+        }
+
+        if (!state.board) {
+            initBoard();
+        }
 
         state.currentPuzzleIndex = 0;
         updateCarPosition(0);
         loadPuzzle(0);
         startTimer();
+        state.board.resize();
     } catch (e) {
         console.error(e);
-        document.getElementById("status-message").innerText =
-            "Không thể tải puzzles.json!";
+        if (String(e && e.message).includes("permission") || (e && e.code === "permission-denied")) {
+            msg.innerText = "Không tạo được phiên chơi. Kiểm tra Firestore rules đã deploy chưa.";
+        } else {
+            msg.innerText = "Không thể tải puzzles.json!";
+        }
     }
 }
 
-// ==========================================
-// NEXT BUTTON
-// ==========================================
-document.getElementById("next-btn").onclick = () => {
-    state.currentPuzzleIndex++;
-    updateCarPosition(state.currentPuzzleIndex);
-    loadPuzzle(state.currentPuzzleIndex);
-};
+function setupModeSelect() {
+    document.getElementById("mode-practice").onclick = () => startGameWithMode("practice");
+    document.getElementById("mode-challenge").onclick = () => startGameWithMode("challenge");
+}
 
-// ==========================================
-// START
-// ==========================================
-document.addEventListener("DOMContentLoaded", initGame);
+function initApp() {
+    loadLeaderboard();
+    setupSaveRecord();
+    setupSoundToggle();
+    setupHelpButtons();
+    setupModeSelect();
+
+    document.getElementById("next-btn").onclick = () => {
+        state.currentPuzzleIndex++;
+        updateCarPosition(state.currentPuzzleIndex);
+        loadPuzzle(state.currentPuzzleIndex);
+    };
+}
+
+document.addEventListener("DOMContentLoaded", initApp);

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vua Cờ Xuyên Việt: Hành Trình Chiếu Hết</title>
 
-    <!-- Chessboard CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <!-- Chessground CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@9.1.1/assets/chessground.base.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chessground@9.1.1/assets/chessground.brown.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -71,10 +72,22 @@
 
         <!-- Chessboard -->
         <div class="board-section">
-            <div id="board" class="board-responsive"></div>
+            <div class="board-responsive">
+                <div id="board"></div>
+            </div>
 
             <div class="controls">
                 <p id="status-message" class="status-msg">Đang tải thế trận...</p>
+                <div id="promotion-picker" class="promotion-picker" hidden>
+                    <span class="promotion-label">Phong cấp thành:</span>
+                    <div class="promotion-choices">
+                        <button type="button" data-piece="q" title="Hậu"></button>
+                        <button type="button" data-piece="r" title="Xe"></button>
+                        <button type="button" data-piece="b" title="Tượng"></button>
+                        <button type="button" data-piece="n" title="Mã"></button>
+                    </div>
+                    <button type="button" id="promotion-cancel" class="promotion-cancel">Hủy</button>
+                </div>
                 <div id="help-buttons" class="help-buttons">
                     <button type="button" id="hint-btn">💡 Gợi ý</button>
                     <button type="button" id="skip-btn">⏭ Bỏ qua bài này</button>
@@ -91,14 +104,12 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

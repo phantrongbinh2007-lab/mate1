@@ -1,3 +1,5 @@
+import { Chessground } from "https://cdn.jsdelivr.net/npm/chessground@9.1.1/+esm";
+
 // ==========================================
 // FIREBASE
 // ==========================================
@@ -35,7 +37,7 @@ const routes = [
     { name: "Thái Nguyên", top: "15%", left: "52%", fact: "Thái Nguyên nổi tiếng với chè xanh và bảo tàng các dân tộc Việt Nam." },
     { name: "Phú Thọ", top: "17%", left: "45%", fact: "Phú Thọ được gọi là cội nguồn, nơi thờ Hùng Vương – vua nước Văn Lang." },
     { name: "Hòa Bình", top: "19%", left: "42%", fact: "Hòa Bình có hồ thủy điện Hòa Bình lớn và thung lũng Mai Châu rất đẹp." },
-    { name: "Vĩnh Phúc", top: "18%", left: "48%", fact: "Vĩnh Phúc có chùa Tây Phương với nhiều tượng Phật gỗ quý." },
+    { name: "Vĩnh Phúc", top: "18%", left: "48%", fact: "Vĩnh Phúc có Tam Đảo – khu nghỉ mát trên núi với khí hậu mát mẻ quanh năm." },
     { name: "Hà Nội", top: "20%", left: "50%", fact: "Hà Nội là thủ đô nghìn năm văn hiến, có Hồ Gươm và phố cổ rất đẹp." },
     { name: "Bắc Giang", top: "18%", left: "56%", fact: "Bắc Giang có vùng vải thiều ngọt nổi tiếng cả nước." },
     { name: "Bắc Ninh", top: "19%", left: "54%", fact: "Bắc Ninh là quê hương của quan họ – hát call-and-response trên thuyền." },
@@ -49,7 +51,7 @@ const routes = [
     { name: "Ninh Bình", top: "27%", left: "50%", fact: "Ninh Bình có Tràng An – hang động và sông nước đẹp như cổ tích." },
     { name: "Thanh Hóa", top: "30%", left: "45%", fact: "Thanh Hóa có thành nhà Hồ – di tích lịch sử bằng đá rất đặc biệt." },
     { name: "Nghệ An", top: "35%", left: "40%", fact: "Nghệ An là quê hương của Bác Hồ – Chủ tịch Hồ Chí Minh kính yêu." },
-    { name: "Hà Tĩnh", top: "40%", left: "45%", fact: "Hà Tình có núi Hồng Lĩnh và biển xanh, là quê của nhiều nhà thơ lớn." },
+    { name: "Hà Tĩnh", top: "40%", left: "45%", fact: "Hà Tĩnh có núi Hồng Lĩnh và biển xanh, là quê của nhiều nhà thơ lớn." },
     { name: "Quảng Bình", top: "45%", left: "50%", fact: "Quảng Bình có động Phong Nha – Kẻ Bàng, hang động kỳ vĩ nhất thế giới." },
     { name: "Quảng Trị", top: "48%", left: "55%", fact: "Quảng Trị có cầu Hiền Lương – biểu tượng chia cắt và thống nhất đất nước." },
     { name: "Thừa Thiên Huế", top: "51%", left: "60%", fact: "Huế từng là kinh đô triều Nguyễn, có Đại Nội và sông Hương thơ mộng." },
@@ -59,7 +61,7 @@ const routes = [
     { name: "Kon Tum", top: "58%", left: "55%", fact: "Kon Tum có nhà rông cao vút – biểu tượng văn hóa của các dân tộc Tây Nguyên." },
     { name: "Gia Lai", top: "63%", left: "55%", fact: "Gia Lai có biển hồ T'nưng – mặt hồ xanh như gương giữa cao nguyên." },
     { name: "Bình Định", top: "65%", left: "68%", fact: "Bình Định có tháp Chăm Bánh Ít – kiến trúc cổ hơn 900 năm tuổi." },
-    { name: "Phú Yên", top: "68%", left: "70%", fact: "Phú Yên có mũi Điện Cấp – nơi ngắm bình minh đẹp nhất ven biển." },
+    { name: "Phú Yên", top: "68%", left: "70%", fact: "Phú Yên có Mũi Điện (Đại Lãnh) – nơi đón bình minh sớm trên đất liền Việt Nam." },
     { name: "Đắk Lắk", top: "68%", left: "58%", fact: "Đắk Lắk có hồ Lak – hồ nước ngọt lớn giữa cao nguyên Tây Nguyên." },
     { name: "Đắk Nông", top: "72%", left: "55%", fact: "Đắk Nông có thác Dray Nur – ngọn thác hùng vĩ giữa rừng xanh." },
     { name: "Khánh Hòa", top: "72%", left: "72%", fact: "Khánh Hòa có vịnh Nha Trang xinh đẹp với nhiều hòn đảo nhỏ." },
@@ -72,14 +74,14 @@ const routes = [
     { name: "Bình Dương", top: "81%", left: "50%", fact: "Bình Dương có khu du lịch Đại Nam – công trình kiến trúc ấn tượng." },
     { name: "TP. Hồ Chí Minh", top: "83%", left: "48%", fact: "TP. Hồ Chí Minh là thành phố lớn nhất Việt Nam, sôi động và hiện đại." },
     { name: "Bà Rịa - Vũng Tàu", top: "85%", left: "56%", fact: "Vũng Tàu có bãi biển đẹp và tượng Chúa Kitô Vua trên núi Nhỏ." },
-    { name: "Long An", top: "84%", left: "42%", fact: "Long An có rừng ngập mặn Cần Giờ – lá phổi xanh của thành phố Hồ Chí Minh." },
+    { name: "Long An", top: "84%", left: "42%", fact: "Long An có vùng Đồng Tháp Mười với những cánh đồng lúa bạt ngàn." },
     { name: "Tiền Giang", top: "86%", left: "45%", fact: "Tiền Giang có cù lao Tân Long – vùng trái cây ngọt nổi tiếng miền Tây." },
     { name: "Bến Tre", top: "87%", left: "48%", fact: "Bến Tre được gọi là xứ dừa – cây dừa mọc khắp nơi." },
     { name: "Đồng Tháp", top: "86%", left: "38%", fact: "Đồng Tháp có cánh đồng sen hồng rộng lớn, đẹp như tranh vẽ." },
-    { name: "Vĩnh Long", top: "88%", left: "42%", fact: "Vĩnh Long có chợ nổi Cái Bè – mua bán trên sông rất vui nhộn." },
+    { name: "Vĩnh Long", top: "88%", left: "42%", fact: "Vĩnh Long có cù lao An Bình – vườn trái cây và kênh rạch đặc trưng miền Tây." },
     { name: "Trà Vinh", top: "90%", left: "46%", fact: "Trà Vinh có nhiều chùa Khmer với kiến trúc mái cong rất đẹp." },
     { name: "Cần Thơ", top: "89%", left: "38%", fact: "Cần Thơ có chợ nổi Cái Răng – chợ sáng sớm trên sông Hậu." },
-    { name: "Hậu Giang", top: "91%", left: "39%", fact: "Hậu Giang có rừng tràm Trà Sư – chim trời tấp nập bay lượn." },
+    { name: "Hậu Giang", top: "91%", left: "39%", fact: "Hậu Giang có chợ nổi Ngã Bảy – nơi giao thương trên sông của miền Tây." },
     { name: "Sóc Trăng", top: "92%", left: "43%", fact: "Sóc Trăng có chùa Dơi – hàng nghìn con dơi treo mình trên cây." },
     { name: "An Giang", top: "88%", left: "32%", fact: "An Giang có núi Sam và miếu Bà Chúa Xứ Núi Sam linh thiêng." },
     { name: "Kiên Giang", top: "92%", left: "28%", fact: "Kiên Giang có quần đảo Phú Quốc – đảo ngọc với biển trong veo." },
@@ -110,16 +112,16 @@ const state = {
     /** Đã dùng gợi ý / bỏ qua → không được lưu BXH */
     usedAssist: false,
     hintLevel: 0,
-    hintMove: null
+    hintMove: null,
+    /** Đang khởi tạo ván — chặn double-click */
+    starting: false,
+    /** { orig, dest } khi chờ chọn quân phong cấp */
+    pendingPromotion: null
 };
 
 // ==========================================
 // UTIL
 // ==========================================
-function pieceTheme(piece) {
-    return 'assets/' + piece.toLowerCase() + '.png';
-}
-
 function formatTime(sec) {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
@@ -145,6 +147,16 @@ function canSaveRecord() {
 // ==========================================
 // TIMER
 // ==========================================
+function challengeAssistNote() {
+    return state.usedAssist ? " · Đã dùng trợ giúp (không xếp hạng)" : "";
+}
+
+function renderChallengeTimer() {
+    const elapsed = Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
+    document.getElementById("timer-display").innerText =
+        `Thời gian thi đấu: ${formatTime(elapsed)}${challengeAssistNote()}`;
+}
+
 function startTimer() {
     clearInterval(state.timerInterval);
     state.startTime = Date.now();
@@ -155,10 +167,8 @@ function startTimer() {
         return;
     }
 
-    state.timerInterval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - state.startTime) / 1000) + state.totalPenalty;
-        document.getElementById("timer-display").innerText = `Thời gian thi đấu: ${formatTime(elapsed)}`;
-    }, 1000);
+    renderChallengeTimer();
+    state.timerInterval = setInterval(renderChallengeTimer, 1000);
 }
 
 function stopTimer() {
@@ -443,38 +453,10 @@ function updateCarPosition(i) {
 }
 
 // ==========================================
-// HIGHLIGHT NƯỚC ĐI HỢP LỆ + GỢI Ý
+// HIGHLIGHT / GỢI Ý (Chessground shapes)
 // ==========================================
 function removeHighlights() {
-    $("#board .square-55d63").removeClass(
-        "highlight-legal highlight-capture highlight-hint-from highlight-hint-to"
-    );
-}
-
-function highlightSquare(square, className) {
-    $("#board .square-" + square).addClass(className);
-}
-
-function onMouseoverSquare(square) {
-    if (state.awaitingNext || state.gameFinished) return;
-
-    const moves = state.game.moves({ square, verbose: true });
-    if (!moves.length) return;
-
-    highlightSquare(square, "highlight-legal");
-    moves.forEach((m) => {
-        const targetPiece = state.game.get(m.to);
-        highlightSquare(m.to, targetPiece ? "highlight-capture" : "highlight-legal");
-    });
-}
-
-function onMouseoutSquare() {
-    if (state.hintLevel > 0 && state.hintMove) {
-        removeHighlights();
-        applyHintHighlights();
-        return;
-    }
-    removeHighlights();
+    if (state.board) state.board.setShapes([]);
 }
 
 function findMateMove() {
@@ -491,30 +473,33 @@ function findMateMove() {
 }
 
 function applyHintHighlights() {
-    if (!state.hintMove) return;
+    if (!state.board || !state.hintMove) return;
+
+    const shapes = [];
     if (state.hintLevel >= 1) {
-        highlightSquare(state.hintMove.from, "highlight-hint-from");
+        shapes.push({ orig: state.hintMove.from, brush: "yellow" });
     }
     if (state.hintLevel >= 2) {
-        highlightSquare(state.hintMove.to, "highlight-hint-to");
+        shapes.push({
+            orig: state.hintMove.from,
+            dest: state.hintMove.to,
+            brush: "green"
+        });
     }
+    state.board.setShapes(shapes);
 }
 
 function markAssistUsed() {
     if (state.usedAssist) return;
     state.usedAssist = true;
     if (state.mode === "challenge") {
-        const timer = document.getElementById("timer-display");
-        const note = " · Đã dùng trợ giúp (không xếp hạng)";
-        if (!timer.innerText.includes("không xếp hạng")) {
-            timer.innerText += note;
-        }
+        renderChallengeTimer();
     }
 }
 
 function setupHelpButtons() {
     document.getElementById("hint-btn").onclick = () => {
-        if (state.awaitingNext || state.gameFinished) return;
+        if (state.awaitingNext || state.gameFinished || state.pendingPromotion) return;
 
         if (!state.hintMove) {
             state.hintMove = findMateMove();
@@ -531,15 +516,15 @@ function setupHelpButtons() {
 
         const msg = document.getElementById("status-message");
         if (state.hintLevel === 1) {
-            msg.textContent = "Gợi ý: hãy nhìn ô được tô vàng — đó là quân cần đi.";
+            msg.textContent = "Gợi ý: vòng vàng đánh dấu quân cần đi.";
         } else {
-            msg.textContent = "Gợi ý: ô vàng là quân đi, ô xanh lá là ô đích.";
+            msg.textContent = "Gợi ý: vòng vàng là quân đi, mũi tên xanh là ô đích.";
         }
         msg.style.color = "#f9a825";
     };
 
     document.getElementById("skip-btn").onclick = () => {
-        if (state.awaitingNext || state.gameFinished) return;
+        if (state.awaitingNext || state.gameFinished || state.pendingPromotion) return;
         if (!confirm("Bỏ qua bài này và đi tiếp?")) return;
 
         markAssistUsed();
@@ -559,33 +544,137 @@ function updateHelpButtonsVisibility() {
 }
 
 // ==========================================
-// CHESSBOARD
+// CHESSGROUND
 // ==========================================
-function onDragStart(source, piece) {
-    if (state.awaitingNext || state.gameFinished) return false;
-    if (state.game.game_over()) return false;
+function turnColor() {
+    return state.game.turn() === "w" ? "white" : "black";
+}
 
-    const turn = state.game.turn();
-    if ((turn === "w" && piece.search(/^b/) !== -1) ||
-        (turn === "b" && piece.search(/^w/) !== -1)) {
-        return false;
-    }
-    return true;
+function getDests() {
+    const dests = new Map();
+    if (state.awaitingNext || state.gameFinished) return dests;
+
+    state.game.moves({ verbose: true }).forEach((m) => {
+        if (!dests.has(m.from)) dests.set(m.from, []);
+        dests.get(m.from).push(m.to);
+    });
+    return dests;
+}
+
+function syncBoard(extra = {}) {
+    if (!state.board) return;
+
+    const color = turnColor();
+    const canMove = !state.awaitingNext
+        && !state.gameFinished
+        && !state.pendingPromotion
+        && !state.game.game_over();
+
+    state.board.set({
+        fen: state.game.fen(),
+        turnColor: color,
+        orientation: color,
+        check: state.game.in_check(),
+        lastMove: undefined,
+        movable: {
+            color: canMove ? color : undefined,
+            dests: canMove ? getDests() : new Map()
+        },
+        ...extra
+    });
 }
 
 function initBoard() {
-    state.board = Chessboard("board", {
-        draggable: true,
-        pieceTheme,
-        position: "start",
-        onDragStart,
-        onDrop,
-        onMouseoverSquare,
-        onMouseoutSquare,
-        onSnapEnd: () => state.board.position(state.game.fen())
+    const el = document.getElementById("board");
+    state.board = Chessground(el, {
+        fen: "start",
+        coordinates: true,
+        movable: {
+            free: false,
+            color: "white",
+            showDests: true,
+            events: {
+                after: onUserMove
+            }
+        },
+        draggable: {
+            enabled: true,
+            showGhost: true
+        },
+        selectable: {
+            enabled: true
+        },
+        premovable: {
+            enabled: false
+        },
+        drawable: {
+            enabled: false,
+            visible: true
+        },
+        highlight: {
+            lastMove: true,
+            check: true
+        }
+    });
+}
+
+function isPromotionMove(orig, dest) {
+    const piece = state.game.get(orig);
+    if (!piece || piece.type !== "p") return false;
+    const rank = dest[1];
+    return (piece.color === "w" && rank === "8") || (piece.color === "b" && rank === "1");
+}
+
+function hidePromotionPicker() {
+    const el = document.getElementById("promotion-picker");
+    if (el) el.hidden = true;
+    state.pendingPromotion = null;
+}
+
+function showPromotionPicker(color) {
+    const el = document.getElementById("promotion-picker");
+    if (!el) return;
+
+    el.dataset.color = color === "w" ? "white" : "black";
+    el.querySelectorAll("[data-piece]").forEach((btn) => {
+        const piece = btn.getAttribute("data-piece");
+        const file = (color === "w" ? "w" : "b") + piece;
+        btn.style.backgroundImage = `url("assets/${file}.png")`;
+        btn.setAttribute("aria-label", ({
+            q: "Hậu", r: "Xe", b: "Tượng", n: "Mã"
+        })[piece] || piece);
+    });
+    el.hidden = false;
+}
+
+function cancelPromotion() {
+    hidePromotionPicker();
+    syncBoard({ lastMove: undefined });
+
+    if (!state.awaitingNext && !state.gameFinished) {
+        const turn = state.game.turn();
+        const msg = document.getElementById("status-message");
+        msg.textContent = `LƯỢT ĐI: BÊN ${turn === "w" ? "TRẮNG" : "ĐEN"} (Bài ${state.currentPuzzleIndex + 1}/${routes.length})`;
+        msg.style.color = turn === "w" ? "#1565c0" : "#37474f";
+    }
+}
+
+function setupPromotionPicker() {
+    const el = document.getElementById("promotion-picker");
+    if (!el) return;
+
+    el.querySelectorAll("[data-piece]").forEach((btn) => {
+        btn.onclick = () => {
+            if (!state.pendingPromotion) return;
+            const { orig, dest } = state.pendingPromotion;
+            const promotion = btn.getAttribute("data-piece");
+            hidePromotionPicker();
+            resolveUserMove(orig, dest, promotion);
+        };
     });
 
-    window.addEventListener("resize", () => state.board.resize());
+    const cancelBtn = document.getElementById("promotion-cancel");
+    if (cancelBtn) cancelBtn.onclick = () => cancelPromotion();
 }
 
 function loadPuzzle(i) {
@@ -593,6 +682,7 @@ function loadPuzzle(i) {
     const nextBtn = document.getElementById("next-btn");
     const saveForm = document.getElementById("save-record-form");
 
+    hidePromotionPicker();
     removeHighlights();
     state.hintLevel = 0;
     state.hintMove = null;
@@ -602,6 +692,7 @@ function loadPuzzle(i) {
         state.gameFinished = true;
         state.awaitingNext = false;
         updateHelpButtonsVisibility();
+        syncBoard();
 
         if (isPractice()) {
             document.getElementById("timer-display").innerText = "Hoàn thành luyện tập!";
@@ -613,7 +704,7 @@ function loadPuzzle(i) {
         }
 
         document.getElementById("timer-display").innerText =
-            `Thành tích thi đấu: ${formatTime(state.finalElapsedSeconds)}`;
+            `Thành tích thi đấu: ${formatTime(state.finalElapsedSeconds)}${challengeAssistNote()}`;
 
         if (canSaveRecord()) {
             msg.textContent = "🎉 ĐÃ XUYÊN VIỆT THÀNH CÔNG! 🎉";
@@ -633,8 +724,7 @@ function loadPuzzle(i) {
     state.gameFinished = false;
 
     const turn = state.game.turn();
-    state.board.orientation(turn === "w" ? "white" : "black");
-    state.board.position(puzzle.fen);
+    syncBoard({ lastMove: undefined });
 
     msg.textContent = `LƯỢT ĐI: BÊN ${turn === "w" ? "TRẮNG" : "ĐEN"} (Bài ${i + 1}/${routes.length})`;
     msg.style.color = turn === "w" ? "#1565c0" : "#37474f";
@@ -644,28 +734,59 @@ function loadPuzzle(i) {
     updateHelpButtonsVisibility();
 }
 
-function onDrop(src, dst) {
-    if (state.awaitingNext || state.gameFinished) return "snapback";
+function onUserMove(orig, dest) {
+    if (state.awaitingNext || state.gameFinished || state.pendingPromotion) {
+        syncBoard();
+        return;
+    }
 
     ensureAudio();
     removeHighlights();
+    state.hintLevel = 0;
+    state.hintMove = null;
 
-    const move = state.game.move({ from: src, to: dst, promotion: "q" });
-    if (!move) return "snapback";
+    if (isPromotionMove(orig, dest)) {
+        const piece = state.game.get(orig);
+        state.pendingPromotion = { orig, dest };
+        // Chessground đã kéo quân tạm — trả FEN gốc và khóa bàn chờ chọn quân
+        state.board.set({
+            fen: state.game.fen(),
+            lastMove: [orig, dest],
+            movable: { color: undefined, dests: new Map() }
+        });
+        showPromotionPicker(piece.color);
+        const msg = document.getElementById("status-message");
+        msg.textContent = "Chọn quân để phong cấp:";
+        msg.style.color = "#1565c0";
+        return;
+    }
 
-    const correct = state.game.in_checkmate();
+    resolveUserMove(orig, dest, "q");
+}
+
+function resolveUserMove(orig, dest, promotion) {
+    if (state.awaitingNext || state.gameFinished) {
+        syncBoard();
+        return;
+    }
+
+    const move = state.game.move({ from: orig, to: dest, promotion });
+    if (!move) {
+        syncBoard();
+        return;
+    }
+
     const msg = document.getElementById("status-message");
 
-    if (correct) {
+    if (state.game.in_checkmate()) {
         state.awaitingNext = true;
-        state.hintLevel = 0;
-        state.hintMove = null;
         playSuccessSound();
         bounceCar();
         msg.textContent = "Chính xác! Lên xe đi tiếp!";
         msg.style.color = "#2e7d32";
         document.getElementById("next-btn").style.display = "inline-block";
         updateHelpButtonsVisibility();
+        syncBoard({ lastMove: [orig, dest] });
         return;
     }
 
@@ -674,30 +795,52 @@ function onDrop(src, dst) {
     if (!isPractice()) {
         state.totalPenalty += 10;
         msg.textContent = "Sai rồi! +10 giây!";
+        renderChallengeTimer();
+        const timer = document.getElementById("timer-display");
+        timer.style.color = "red";
+        setTimeout(() => { timer.style.color = "#d84315"; }, 500);
     } else {
         msg.textContent = "Sai rồi! Thử lại nhé.";
     }
     msg.style.color = "#c62828";
 
-    if (!isPractice()) {
-        const timer = document.getElementById("timer-display");
-        timer.style.color = "red";
-        setTimeout(() => { timer.style.color = "#d84315"; }, 500);
-    }
-
-    return "snapback";
+    syncBoard({ lastMove: undefined });
 }
 
 // ==========================================
 // MODE SELECT + INIT
 // ==========================================
+function setModeButtonsDisabled(disabled) {
+    document.getElementById("mode-practice").disabled = disabled;
+    document.getElementById("mode-challenge").disabled = disabled;
+}
+
+function abortStartToModeSelect(message) {
+    state.starting = false;
+    state.mode = null;
+    state.runId = null;
+    hidePromotionPicker();
+    document.getElementById("game-container").hidden = true;
+    document.getElementById("mode-select").hidden = false;
+    setModeButtonsDisabled(false);
+    document.getElementById("timer-display").innerText = "Chọn chế độ để bắt đầu";
+    if (message) alert(message);
+}
+
 async function startGameWithMode(mode) {
+    if (state.starting) return;
+    state.starting = true;
+    setModeButtonsDisabled(true);
+
     state.mode = mode;
     state.usedAssist = false;
     state.hintLevel = 0;
     state.hintMove = null;
     state.runId = null;
     state.recordSaved = false;
+    state.awaitingNext = false;
+    state.gameFinished = false;
+    hidePromotionPicker();
 
     document.getElementById("mode-select").hidden = true;
     document.getElementById("game-container").hidden = false;
@@ -724,14 +867,19 @@ async function startGameWithMode(mode) {
         updateCarPosition(0);
         loadPuzzle(0);
         startTimer();
-        state.board.resize();
+        requestAnimationFrame(() => {
+            if (state.board) state.board.redrawAll();
+        });
+        state.starting = false;
     } catch (e) {
         console.error(e);
+        let message = "Không thể tải puzzles.json!";
         if (String(e && e.message).includes("permission") || (e && e.code === "permission-denied")) {
-            msg.innerText = "Không tạo được phiên chơi. Kiểm tra Firestore rules đã deploy chưa.";
-        } else {
-            msg.innerText = "Không thể tải puzzles.json!";
+            message = "Không tạo được phiên chơi. Kiểm tra Firestore rules đã deploy chưa.";
+        } else if (e && e.message === "missing-run") {
+            message = "Không tạo được phiên chơi. Thử lại sau.";
         }
+        abortStartToModeSelect(message);
     }
 }
 
@@ -746,8 +894,10 @@ function initApp() {
     setupSoundToggle();
     setupHelpButtons();
     setupModeSelect();
+    setupPromotionPicker();
 
     document.getElementById("next-btn").onclick = () => {
+        if (state.pendingPromotion) return;
         state.currentPuzzleIndex++;
         updateCarPosition(state.currentPuzzleIndex);
         loadPuzzle(state.currentPuzzleIndex);

@@ -116,6 +116,13 @@ body {
     box-shadow: 0 6px 16px rgba(0,0,0,0.12);
 }
 
+.mode-card:disabled {
+    opacity: 0.55;
+    cursor: wait;
+    transform: none;
+    box-shadow: none;
+}
+
 .mode-practice {
     background: #e8f5e9;
     border-color: #81c784;
@@ -202,23 +209,6 @@ body {
     background: #ffe0b2;
 }
 
-/* Highlight n??c ?i h?p l? / g?i ? */
-.highlight-legal {
-    box-shadow: inset 0 0 0 4px rgba(21, 101, 192, 0.55);
-}
-
-.highlight-capture {
-    box-shadow: inset 0 0 0 4px rgba(198, 40, 40, 0.65);
-}
-
-.highlight-hint-from {
-    box-shadow: inset 0 0 0 5px rgba(255, 193, 7, 0.9);
-}
-
-.highlight-hint-to {
-    box-shadow: inset 0 0 0 5px rgba(46, 125, 50, 0.85);
-}
-
 .game-container {
     display: flex;
     gap: 40px;
@@ -227,6 +217,11 @@ body {
     border-radius: 15px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     align-items: flex-start;
+}
+
+.game-container[hidden],
+.mode-select[hidden] {
+    display: none !important;
 }
 
 /* =======================================
@@ -294,7 +289,7 @@ body {
 }
 
 /* =======================================
-   B?N C? & ?I?U KHI?N (BOARD)
+   BÀN CỜ & ĐIỀU KHIỂN (CHESSGROUND)
    ======================================= */
 .board-section {
     display: flex;
@@ -303,16 +298,97 @@ body {
     flex-grow: 1;
 }
 
-/* K?ch thu?c b?n c? to d?p tr?n m?y t?nh */
-.board-responsive, #board {
-    width: 100% !important;
-    max-width: 480px !important;
-    min-width: 400px;
+.board-responsive {
+    width: 100%;
+    max-width: 480px;
+    min-width: 280px;
+    aspect-ratio: 1 / 1;
 }
+
+.board-responsive #board,
+.board-responsive .cg-wrap {
+    width: 100%;
+    height: 100%;
+}
+
+/* Quân cờ tùy chỉnh từ assets/ */
+.cg-wrap piece.pawn.white { background-image: url("assets/wp.png"); }
+.cg-wrap piece.knight.white { background-image: url("assets/wn.png"); }
+.cg-wrap piece.bishop.white { background-image: url("assets/wb.png"); }
+.cg-wrap piece.rook.white { background-image: url("assets/wr.png"); }
+.cg-wrap piece.queen.white { background-image: url("assets/wq.png"); }
+.cg-wrap piece.king.white { background-image: url("assets/wk.png"); }
+.cg-wrap piece.pawn.black { background-image: url("assets/bp.png"); }
+.cg-wrap piece.knight.black { background-image: url("assets/bn.png"); }
+.cg-wrap piece.bishop.black { background-image: url("assets/bb.png"); }
+.cg-wrap piece.rook.black { background-image: url("assets/br.png"); }
+.cg-wrap piece.queen.black { background-image: url("assets/bq.png"); }
+.cg-wrap piece.king.black { background-image: url("assets/bk.png"); }
 
 .controls {
     text-align: center;
     width: 100%;
+}
+
+.promotion-picker {
+    margin-top: 14px;
+    padding: 12px;
+    background: #e3f2fd;
+    border: 2px solid #90caf9;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.promotion-picker[hidden] {
+    display: none !important;
+}
+
+.promotion-label {
+    font-weight: bold;
+    color: #1565c0;
+    font-size: 15px;
+}
+
+.promotion-choices {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.promotion-choices button {
+    width: 52px;
+    height: 52px;
+    border: 2px solid #90caf9;
+    border-radius: 8px;
+    background-color: #fff;
+    background-size: 85%;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.promotion-choices button:hover {
+    background-color: #bbdefb;
+    transform: translateY(-1px);
+}
+
+.promotion-cancel {
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #90a4ae;
+    background: #eceff1;
+    color: #455a64;
+    cursor: pointer;
+}
+
+.promotion-cancel:hover {
+    background: #cfd8dc;
 }
 
 .status-msg {
@@ -453,11 +529,12 @@ body {
     }
     .board-section {
         width: 100%;
+        max-width: 420px;
     }
-    .board-responsive, #board {
-        width: 90% !important;
-        max-width: 420px !important;
-        min-width: unset; /* C?c k? quan tr?ng d? kh?ng b? tr?n m?n h?nh di?n tho?i */
+    .board-responsive {
+        width: 90%;
+        max-width: 420px;
+        min-width: unset;
     }
     .province-fact {
         max-width: 100%;
@@ -482,8 +559,8 @@ body {
 }
 
 @media (max-width: 400px) {
-    .board-responsive, #board {
-        width: 95% !important;
+    .board-responsive {
+        width: 95%;
     }
     .leaderboard-section {
         width: 95%;

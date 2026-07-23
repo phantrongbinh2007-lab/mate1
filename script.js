@@ -573,7 +573,7 @@ function syncBoard(extra = {}) {
     state.board.set({
         fen: state.game.fen(),
         turnColor: color,
-        orientation: color,
+        orientation: "white",
         check: state.game.in_check(),
         lastMove: undefined,
         movable: {
@@ -584,10 +584,22 @@ function syncBoard(extra = {}) {
     });
 }
 
+function redrawBoardSoon() {
+    requestAnimationFrame(() => {
+        if (!state.board) return;
+        state.board.redrawAll();
+        // Lần 2 sau layout ổn định (tránh bàn bị co nhỏ lúc mới hiện)
+        requestAnimationFrame(() => {
+            if (state.board) state.board.redrawAll();
+        });
+    });
+}
+
 function initBoard() {
     const el = document.getElementById("board");
     state.board = Chessground(el, {
         fen: "start",
+        orientation: "white",
         coordinates: true,
         movable: {
             free: false,
@@ -725,6 +737,7 @@ function loadPuzzle(i) {
 
     const turn = state.game.turn();
     syncBoard({ lastMove: undefined });
+    redrawBoardSoon();
 
     msg.textContent = `LƯỢT ĐI: BÊN ${turn === "w" ? "TRẮNG" : "ĐEN"} (Bài ${i + 1}/${routes.length})`;
     msg.style.color = turn === "w" ? "#1565c0" : "#37474f";
@@ -867,9 +880,7 @@ async function startGameWithMode(mode) {
         updateCarPosition(0);
         loadPuzzle(0);
         startTimer();
-        requestAnimationFrame(() => {
-            if (state.board) state.board.redrawAll();
-        });
+        redrawBoardSoon();
         state.starting = false;
     } catch (e) {
         console.error(e);
